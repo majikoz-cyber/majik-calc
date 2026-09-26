@@ -720,14 +720,16 @@ async function fetchMarket(manual){
   marketCache=result;renderMarket();autoFillGoldPrice(0);
   if(!offline&&source!=='کش ذخیره‌شده'){try{localStorage.setItem('majik-market-cache',JSON.stringify({data:result,time:Date.now()}))}catch(e){}}
   var nowStr=new Date().toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'});
-  $('#mktUpdated').textContent='به‌روزرسانی: '+nowStr+' • '+Object.keys(result).length+' قیمت';
+  var isRealTime=source==='tgju.org مستقیم';
+  $('#mktUpdated').textContent='به‌روزرسانی: '+nowStr+' • '+Object.keys(result).length+' قیمت'+(isRealTime?' (لحظه‌ای)':' (۲۰ دقیقه پیش)');
   if(status){
-    var cls=(offline||source==='کش ذخیره‌شده')?'warn':'ok';
+    var cls=(offline||source==='کش ذخیره‌شده')?'warn':(isRealTime?'ok':'info');
     status.className='mkt-status '+cls;
-    status.innerHTML=(cls==='ok'?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4m0 4h.01"/></svg>')+'<span>قیمت‌ها از: <b>'+source+'</b>'+(offline?' — برای قیمت دقیق، اینترنت را وصل و به‌روزرسانی بزنید':'')+'</span>';
+    var srcLabel=source+(isRealTime?' ✓ لحظه‌ای':' (هر ۲۰ دقیقه آپدیت)');
+    status.innerHTML=(cls==='ok'?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>':cls==='info'?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-6M12 8h.01"/></svg>':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4m0 4h.01"/></svg>')+'<span>قیمت‌ها از: <b>'+srcLabel+'</b>'+(offline?' — اینترنت را وصل کنید':'')+'</span>';
     status.hidden=false;
   }
-  if(manual)toast('قیمت‌های بازار به‌روزرسانی شد','ok');
+  if(manual)toast('قیمت‌های بازار به‌روزرسانی شد'+(isRealTime?' ✓ لحظه‌ای':''),'ok');
 }
   
 
