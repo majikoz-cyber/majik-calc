@@ -682,24 +682,26 @@ async function fetchMarket(manual){
   var fallbackPrices={USD:{price:215000,change:0},EUR:{price:246000,change:0},GBP:{price:309420,change:0},GOLD:{price:4285,change:0},G18:{price:23889600,change:0},IMAMI:{price:238510000,change:0},NIM:{price:122000000,change:0},ROB:{price:64500000,change:0}};
   var url='https://api.tgju.org/v1/widget/tmp?keys='+TGJU_KEYS+'&_='+Date.now();
   function parsePrices(txt){if(!txt||txt.trim().charAt(0)!=='{')return null;var j=null;try{j=JSON.parse(txt)}catch(e){return null}var inds=(j&&j.response&&j.response.indicators)||[];if(!inds.length)return null;var res={};inds.forEach(function(item){var key=detectCard(item.title);if(!key||res[key])return;var norm=normalizeItem(item,key);if(norm)res[key]=norm});return Object.keys(res).length?res:null}
+
+  function fetchWithTimeout(u,ms){return new Promise(function(res,rej){var c=new AbortController();var t=setTimeout(function(){c.abort();rej(new Error('timeout'))},ms);fetch(u,{cache:'no-store',signal:c.signal}).then(function(r){clearTimeout(t);res(r)}).catch(function(e){clearTimeout(t);rej(e)})})}
+
   var sources=[
-    {getUrl:function(){return 'https://majikoz-cyber.github.io/majik-calc/prices.json?_='+Date.now()},label:'سرور GitHub (هر ۲۰ دقیقه)',offline:false},
-    {getUrl:function(u){return u},label:'tgju.org',offline:false},
-    {getUrl:function(){return './prices.json'},label:'بسته محلی (آفلاین)',offline:true}
+    {url:'https://api.tgju.org/v1/widget/tmp?keys='+TGJU_KEYS+'&_='+Date.now(),label:'tgju.org',offline:false,timeout:8000},
+    {url:'https://majikoz-cyber.github.io/majik-calc/prices.json?_='+Date.now(),label:'GitHub Pages',offline:false,timeout:5000},
+    {url:'./prices.json',label:'بسته محلی',offline:true,timeout:3000}
   ];
   if(location.protocol.indexOf('http')===0){
-    sources.push({getUrl:function(u){return 'https://api.allorigins.win/raw?url='+encodeURIComponent(u)},label:'پراکسی',offline:false});
-    sources.push({getUrl:function(u){return 'https://api.codetabs.com/v1/proxy/?req='+encodeURIComponent(u)},label:'پراکسی',offline:false});
+    sources.push({url:'https://api.allorigins.win/raw?url='+encodeURIComponent('https://api.tgju.org/v1/widget/tmp?keys='+TGJU_KEYS),label:'پراکسی AllOrigins',offline:false,timeout:10000});
+    sources.push({url:'https://api.codetabs.com/v1/proxy/?req='+encodeURIComponent('https://api.tgju.org/v1/widget/tmp?keys='+TGJU_KEYS),label:'پراکسی CodeTabs',offline:false,timeout:10000});
   }
+
   var result=null,source='',offline=false;
-  for(var si=0;si<sources.length;si++){
-    try{
-      var r=await fetch(sources[si].getUrl(url),{cache:'no-store'});
-      if(!r.ok)continue;
-      var res=parsePrices(await r.text());
-      if(res){result=res;source=sources[si].label;offline=sources[si].offline;break}
-    }catch(e){}
-  }
+  try{
+    var promises=sources.map(function(s){return fetchWithTimeout(s.url,s.timeout).then(function(r){if(!r.ok)throw new Error('http '+r.status);return r.text()}).then(function(txt){var parsed=parsePrices(txt);if(parsed)return{data:parsed,source:s.label,offline:s.offline};throw new Error('parse failed')}).catch(function(){return null})});
+    var settled=await Promise.allSettled(promises);
+    for(var i=0;i<settled.length;i++){if(settled[i].status==='fulfilled'&&settled[i].value){result=settled[i].value.data;source=settled[i].value.source;offline=settled[i].value.offline;break}}
+  }catch(e){}
+
   if(!result){
     try{
       var cached=JSON.parse(localStorage.getItem('majik-market-cache')||'null');
