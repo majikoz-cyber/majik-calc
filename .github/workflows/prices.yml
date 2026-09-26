@@ -1,0 +1,20 @@
+name: prices
+on:
+  schedule:
+    - cron: '*/20 * * * *'
+  workflow_dispatch:
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch tgju
+        run: |
+          curl -s --max-time 30 "https://api.tgju.org/v1/widget/tmp?keys=137138,137137,137139,137140,137141,137119,137123,137120,137121,137122,137225,137207,137221,137222,137218" -o prices.json
+      - name: Commit
+        run: |
+          git config user.name "price-bot"
+          git config user.email "bot@noreply.github.com"
+          git add prices.json
+          git diff --cached --quiet || git commit -m "update prices"
+          git push
