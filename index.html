@@ -669,7 +669,7 @@ function renderGold(){
   else{box.style.display='none'}
   $('#goldBar').innerHTML=bar;$('#goldLegend').innerHTML=legend;
 }
-function setGoldLive(){const live=karatLivePrice();if(!live){toast('قیمت روز هنوز در دسترس نیست','warn');return false}$('#goldPrice').value=String(live);applyGrouping($('#goldPrice'));goldPriceTouched=false;applyKarat();return true}
+function setGoldLive(){const live=karatLivePrice();if(live){$('#goldPrice').value=String(live);applyGrouping($('#goldPrice'));goldPriceTouched=false;applyKarat();toast('قیمت روز طلا اعمال شد','ok');return true}const btn=$('#goldLiveBtn');btn.disabled=true;btn.textContent='⟳ در حال دریافت…';fetchMarket(false).then(function(){const fresh=karatLivePrice();if(fresh){$('#goldPrice').value=String(fresh);applyGrouping($('#goldPrice'));goldPriceTouched=false;applyKarat();toast('قیمت روز طلا اعمال شد','ok')}else{toast('قیمت روز در دسترس نیست','warn')}btn.disabled=false;btn.textContent='⟳ قیمت روز'});return false}
 function autoFillGoldPrice(tries){if(karatLivePrice()){applyKarat();return}if(tries>0)setTimeout(()=>autoFillGoldPrice(tries-1),1200)}
 $$('.mode-opt').forEach(b=>b.addEventListener('click',()=>{goldMode=b.dataset.mode;$('#form-gold').dataset.mode=goldMode;$$('.mode-opt').forEach(x=>x.classList.toggle('active',x===b));calcGold()}));
 $('#form-gold').querySelectorAll('input').forEach(i=>i.addEventListener('input',calcGold));
