@@ -3,6 +3,10 @@ on:
   schedule:
     - cron: '*/20 * * * *'
   workflow_dispatch:
+
+permissions:
+  contents: write
+
 jobs:
   fetch:
     runs-on: ubuntu-latest
@@ -11,6 +15,7 @@ jobs:
       - name: Fetch tgju
         run: |
           curl -s --max-time 30 "https://api.tgju.org/v1/widget/tmp?keys=137138,137137,137139,137140,137141,137119,137123,137120,137121,137122,137225,137207,137221,137222,137218" -o prices.json
+          head -c 200 prices.json
       - name: Commit
         run: |
           git config user.name "price-bot"
