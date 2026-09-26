@@ -546,7 +546,7 @@ function tickClock(){const n=new Date();$('#faDate').textContent=n.toLocaleDateS
 setInterval(tickClock,1000);tickClock();
 $('#tickerTrack').innerHTML=['فرمول قسط مساوی: اصل × نرخ ÷ (۱ − (۱ + نرخ)⁻ⁿ)','اضافه‌کار معمولاً ۴۰٪ بیشتر از نرخ ساعت عادی محاسبه می‌شود','حاشیه سود واقعی = سود خالص پس از تخفیف و پورسانت ÷ بهای تمام‌شده','فرمول فروش طلا: وزن خالص × (قیمت ۱۸ عیار × ۷۴۰ ÷ ۷۵۰)','فرمول قسط مساوی: اصل × نرخ ÷ (۱ − (۱ + نرخ)⁻ⁿ)','اضافه‌کار معمولاً ۴۰٪ بیشتر از نرخ ساعت عادی محاسبه می‌شود','حاشیه سود واقعی = سود خالص پس از تخفیف و پورسانت ÷ بهای تمام‌شده','فرمول فروش طلا: وزن خالص × (قیمت ۱۸ عیار × ۷۴۰ ÷ ۷۵۰)'].map(t=>`<span>${t}</span>`).join('');
 let activeTool='loan';
-function activateTab(n){activeTool=n;$$('.tab').forEach(b=>{const o=b.dataset.tab===n;b.classList.toggle('active',o)});$$('.panel').forEach(p=>p.classList.toggle('active',p.id==='panel-'+n));closeJCal();if(n==='market'&&!marketCache)fetchMarket(false)}
+function activateTab(n){activeTool=n;$$('.tab').forEach(b=>{const o=b.dataset.tab===n;b.classList.toggle('active',o)});$$('.panel').forEach(p=>p.classList.toggle('active',p.id==='panel-'+n));closeJCal();if(n==='market'&&!marketCache)fetchMarket(false);if(n==='gold'){if(marketCache)autoFillGoldPrice(0);else fetchMarket(false)}}
 $$('.tab').forEach(b=>b.addEventListener('click',()=>activateTab(b.dataset.tab)));
 function setErr(id,msg){const f=$('#'+id).closest('.field');f.classList.add('invalid');f.querySelector('.err').textContent=msg}
 function clearErrs(form){form.querySelectorAll('.field.invalid').forEach(f=>f.classList.remove('invalid'))}
@@ -679,29 +679,25 @@ async function fetchMarket(manual){
   if(btn)btn.classList.add('spin');
   $('#mktUpdated').textContent='در حال دریافت قیمت‌ها…';
   if(status)status.hidden=true;
-  var fallbackPrices={USD:{price:215000,change:0},EUR:{price:246000,change:0},GBP:{price:286000,change:0},GOLD:{price:4200,change:0},G18:{price:21839600,change:0},IMAMI:{price:245000000,change:0},NIM:{price:124000000,change:0},ROB:{price:69000000,change:0}};
+  var fallbackPrices={USD:{price:215000,change:0},EUR:{price:246000,change:0},GBP:{price:309420,change:0},GOLD:{price:4285,change:0},G18:{price:23889600,change:0},IMAMI:{price:238510000,change:0},NIM:{price:122000000,change:0},ROB:{price:64500000,change:0}};
   var url='https://api.tgju.org/v1/widget/tmp?keys='+TGJU_KEYS+'&_='+Date.now();
+  function parsePrices(txt){if(!txt||txt.trim().charAt(0)!=='{')return null;var j=null;try{j=JSON.parse(txt)}catch(e){return null}var inds=(j&&j.response&&j.response.indicators)||[];if(!inds.length)return null;var res={};inds.forEach(function(item){var key=detectCard(item.title);if(!key||res[key])return;var norm=normalizeItem(item,key);if(norm)res[key]=norm});return Object.keys(res).length?res:null}
   var sources=[
-    function(){return 'https://majikoz-cyber.github.io/majik-calc/prices.json?_='+Date.now()},
-    function(u){return u}
+    {getUrl:function(){return 'https://majikoz-cyber.github.io/majik-calc/prices.json?_='+Date.now()},label:'سرور GitHub (هر ۲۰ دقیقه)',offline:false},
+    {getUrl:function(u){return u},label:'tgju.org',offline:false},
+    {getUrl:function(){return './prices.json'},label:'بسته محلی (آفلاین)',offline:true}
   ];
   if(location.protocol.indexOf('http')===0){
-    sources.push(function(u){return 'https://api.allorigins.win/raw?url='+encodeURIComponent(u)});
-    sources.push(function(u){return 'https://api.codetabs.com/v1/proxy/?quest='+encodeURIComponent(u)});
+    sources.push({getUrl:function(u){return 'https://api.allorigins.win/raw?url='+encodeURIComponent(u)},label:'پراکسی',offline:false});
+    sources.push({getUrl:function(u){return 'https://api.codetabs.com/v1/proxy/?req='+encodeURIComponent(u)},label:'پراکسی',offline:false});
   }
-  var result=null,source='';
+  var result=null,source='',offline=false;
   for(var si=0;si<sources.length;si++){
     try{
-      var r=await fetch(sources[si](url),{cache:'no-store'});
+      var r=await fetch(sources[si].getUrl(url),{cache:'no-store'});
       if(!r.ok)continue;
-      var txt=await r.text();
-      if(!txt||txt.trim().charAt(0)!=='{')continue;
-      var j=JSON.parse(txt);
-      var inds=(j&&j.response&&j.response.indicators)||[];
-      if(!inds.length)continue;
-      var res={};
-      inds.forEach(function(item){var key=detectCard(item.title);if(!key||res[key])return;var norm=normalizeItem(item,key);if(norm)res[key]=norm});
-      if(Object.keys(res).length){result=res;source=(si===0)?'سرور GitHub (هر ۲۰ دقیقه)':(si===1)?'tgju.org':'پراکسی';break}
+      var res=parsePrices(await r.text());
+      if(res){result=res;source=sources[si].label;offline=sources[si].offline;break}
     }catch(e){}
   }
   if(!result){
@@ -710,7 +706,6 @@ async function fetchMarket(manual){
       if(cached&&cached.data&&Object.keys(cached.data).length){result=cached.data;source='کش ذخیره‌شده'}
     }catch(e){}
   }
-  var offline=false;
   if(!result){result=fallbackPrices;source='قیمت‌های تخمینی (آفلاین)';offline=true}
   if(btn)btn.classList.remove('spin');
   marketCache=result;renderMarket();autoFillGoldPrice(0);
