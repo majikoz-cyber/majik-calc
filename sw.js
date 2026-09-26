@@ -1,6 +1,6 @@
 var CACHE='majik-v3';
-var ASSETS=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
-self.addEventListener('install',function(e){e.waitUntil(caches.open(CACHE).then(function(c){return c.addAll(ASSETS)}));self.skipWaiting()});
+var ASSETS=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./prices.json'];
+self.addEventListener('install',function(e){e.waitUntil(caches.open(CACHE).then(function(c){return c.addAll(ASSETS)}).catch(function(){}));self.skipWaiting()});
 self.addEventListener('activate',function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==CACHE}).map(function(k){return caches.delete(k)}))}));self.clients.claim()});
 self.addEventListener('fetch',function(e){
   if(e.request.method!=='GET')return;
