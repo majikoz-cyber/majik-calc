@@ -749,7 +749,7 @@ $('#form-loan').querySelectorAll('input').forEach(i=>i.addEventListener('input',
 $('#form-salary').querySelectorAll('input').forEach(i=>i.addEventListener('input',calcSalary));
 $('#form-sales').querySelectorAll('input').forEach(i=>i.addEventListener('input',calcSales));
 $$('input[data-num]').forEach(inp=>{inp.addEventListener('input',()=>applyGrouping(inp))});
-$('#goldWeight').value='5';$('#goldStone').value='0';$('#goldOjrat').value='18';$('#goldSood').value='7';$('#goldTax').value='10';$('#goldDisc').value='0';$('#goldKasr').value='1';$$('#goldWeight,#goldStone,#goldOjrat,#goldSood,#goldTax,#goldDisc,#goldKasr').forEach(applyGrouping);
+$('#goldWeight').value='5';$('#goldStone').value='0';$('#goldOjrat').value='18';$('#goldSood').value='7';$('#goldTax').value='10';$('#goldDisc').value='0';$('#goldKasr').value='1';['goldWeight','goldStone','goldOjrat','goldSood','goldTax','goldDisc','goldKasr'].forEach(id=>applyGrouping($('#'+id)));
 </script>
 <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js')})}</script>
 </body>
