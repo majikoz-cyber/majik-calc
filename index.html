@@ -695,10 +695,10 @@ async function fetchMarket(manual){
   function fetchWithTimeout(u,ms){return new Promise(function(res,rej){var c=new AbortController();var t=setTimeout(function(){c.abort();rej(new Error('timeout'))},ms);fetch(u,{cache:'no-store',signal:c.signal}).then(function(r){clearTimeout(t);res(r)}).catch(function(e){clearTimeout(t);rej(e)})})}
 
   var sources=[
+    {url:'https://majikoz-cyber.github.io/majik-calc/prices.json?_='+Date.now(),label:'GitHub Pages (هر ۲۰ دقیقه)',offline:false,timeout:5000},
+    {url:'https://api.tgju.org/v1/widget/tmp?keys='+TGJU_KEYS+'&_='+Date.now(),label:'tgju.org مستقیم',offline:false,timeout:8000},
     {url:'https://api.allorigins.win/raw?url='+encodeURIComponent('https://api.tgju.org/v1/widget/tmp?keys='+TGJU_KEYS),label:'پراکسی AllOrigins',offline:false,timeout:10000},
     {url:'https://api.codetabs.com/v1/proxy/?req='+encodeURIComponent('https://api.tgju.org/v1/widget/tmp?keys='+TGJU_KEYS),label:'پراکسی CodeTabs',offline:false,timeout:10000},
-    {url:'https://api.tgju.org/v1/widget/tmp?keys='+TGJU_KEYS+'&_='+Date.now(),label:'tgju.org مستقیم',offline:false,timeout:8000},
-    {url:'https://majikoz-cyber.github.io/majik-calc/prices.json?_='+Date.now(),label:'GitHub Pages',offline:false,timeout:5000},
     {url:'./prices.json',label:'بسته محلی',offline:true,timeout:3000}
   ];
 
