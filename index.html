@@ -673,48 +673,57 @@ const TGJU_KEYS='137138,137137,137139,137140,137141,137119,137123,137120,137121,
 let marketCache=null;
 function detectCard(title){const t=(title||'').replace(/ي/g,'ی').replace(/ك/g,'ک');if(/ربع/.test(t))return 'ROB';if(/نیم/.test(t))return 'NIM';if(/امامی|تمام\s*بهار|طرح\s*جدید/.test(t))return 'IMAMI';if(/انس|اونس/.test(t))return 'GOLD';if(/۱۸|18/.test(t))return 'G18';if(/پوند/.test(t))return 'GBP';if(/یورو/.test(t))return 'EUR';if(/دلار/.test(t)&&!/کانادا|استرالیا|نیوزیلند|سنگاپور|هنگ/.test(t))return 'USD';return null}
 function normalizeItem(item,key){if(!item||!item.p)return null;const p=Number(item.p);if(!isFinite(p)||p<=0)return null;if(key==='GOLD'){return{price:Math.round(p*100)/100,high:item.h?Math.round(Number(item.h)*100)/100:Math.round(p*1.01*100)/100,low:item.l?Math.round(Number(item.l)*100)/100:Math.round(p*0.99*100)/100,change:Number(item.dp||0),source:'tgju.org',time:item.t}}return{price:Math.round(p/10),high:item.h?Math.round(Number(item.h)/10):Math.round(p*1.005/10),low:item.l?Math.round(Number(item.l)/10):Math.round(p*0.995/10),change:Number(item.dp||0),source:'tgju.org',time:item.t}}
-async function fetchMarket(manual){
+
+ async function fetchMarket(manual){
   const btn=$('#refreshMkt'),status=$('#mktStatus');
-  btn.classList.add('spin');$('#mktUpdated').textContent='در حال دریافت قیمت‌ها…';status.hidden=true;
-  try{
-    const r=await fetch('https://api.tgju.org/v1/widget/tmp?keys='+TGJU_KEYS+'&_='+Date.now(),{cache:'no-store'});
-    if(!r.ok)throw new Error('HTTP '+r.status);
-    const data=await r.json();
-    const indicators=(data&&data.response&&data.response.indicators)||[];
-    if(!indicators.length)throw new Error('داده‌ای دریافت نشد');
-    const result={};
-    indicators.forEach(item=>{const key=detectCard(item.title);if(!key||result[key])return;const norm=normalizeItem(item,key);if(norm)result[key]=norm});
-    btn.classList.remove('spin');
-    if(!Object.keys(result).length)throw new Error('هیچ قیمت معتبری پیدا نشد');
-    marketCache=result;renderMarket();
+  if(btn)btn.classList.add('spin');
+  $('#mktUpdated').textContent='در حال دریافت قیمت‌ها…';
+  if(status)status.hidden=true;
+  const url='https://api.tgju.org/v1/widget/tmp?keys='+TGJU_KEYS+'&_='+Date.now();
+  const sources=[
+    function(u){return u},
+    function(u){return 'https://api.allorigins.win/raw?url='+encodeURIComponent(u)},
+    function(u){return 'https://api.codetabs.com/v1/proxy/?quest='+encodeURIComponent(u)},
+    function(u){return 'https://corsproxy.org/?'+encodeURIComponent(u)}
+  ];
+  let result=null,source='';
+  for(let si=0;si<sources.length;si++){
+    try{
+      const r=await fetch(sources[si](url),{cache:'no-store'});
+      if(!r.ok)continue;
+      const txt=await r.text();
+      const j=JSON.parse(txt);
+      const inds=(j&&j.response&&j.response.indicators)||[];
+      if(!inds.length)continue;
+      const res={};
+      inds.forEach(function(item){const key=detectCard(item.title);if(!key||res[key])return;const norm=normalizeItem(item,key);if(norm)res[key]=norm});
+      if(Object.keys(res).length){result=res;source=(si===0)?'tgju.org':'پراکسی';break}
+    }catch(e){}
+  }
+  if(btn)btn.classList.remove('spin');
+  if(result){
+    marketCache=result;renderMarket();autoFillGoldPrice(0);
     try{localStorage.setItem('majik-market-cache',JSON.stringify({data:result,time:Date.now()}))}catch(e){}
     const nowStr=new Date().toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'});
-    const sample=Object.values(result)[0];
-    let txt='به‌روزرسانی: '+nowStr+' • '+Object.keys(result).length+' قیمت • tgju.org';
-    if(sample&&sample.time)txt+=' • داده: '+sample.time;
-    $('#mktUpdated').textContent=txt;
-    status.className='mkt-status ok';
-    status.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg><span>✅ قیمت‌های لحظه‌ای از <b>tgju.org</b></span>';
-    status.hidden=false;
+    $('#mktUpdated').textContent='به‌روزرسانی: '+nowStr+' • '+Object.keys(result).length+' قیمت • '+source;
+    if(status){status.className='mkt-status ok';status.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg><span>✅ قیمت‌های لحظه‌ای از <b>'+source+'</b></span>';status.hidden=false}
     if(manual)toast('قیمت‌های بازار به‌روزرسانی شد','ok');
-  }catch(e){
-    btn.classList.remove('spin');
-    try{
-      const cached=JSON.parse(localStorage.getItem('majik-market-cache')||'null');
-      if(cached&&cached.data&&Object.keys(cached.data).length){
-        marketCache=cached.data;renderMarket();
-        status.className='mkt-status warn';
-        status.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4m0 4h.01"/></svg><span>⚠️ اتصال برقرار نشد؛ نمایش آخرین قیمت‌های ذخیره‌شده ('+Math.round((Date.now()-cached.time)/60000)+' دقیقه پیش)</span>';
-        status.hidden=false;$('#mktUpdated').textContent='کش محلی';
-        if(manual)toast('خطا در دریافت؛ استفاده از کش','warn');
-        return;
-      }
-    }catch(e2){}
-    status.className='mkt-status err';
-    status.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4m0 4h.01"/></svg><span>خطا: '+e.message+'</span>';
-    status.hidden=false;$('#mktUpdated').textContent='خطا در دریافت';
-    if(manual)toast('دریافت قیمت‌ها ناموفق بود','err');
+    return;
   }
+  try{
+    const cached=JSON.parse(localStorage.getItem('majik-market-cache')||'null');
+    if(cached&&cached.data&&Object.keys(cached.data).length){
+      marketCache=cached.data;renderMarket();autoFillGoldPrice(0);
+      if(status){status.className='mkt-status warn';status.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4m0 4h.01"/></svg><span>⚠️ اتصال برقرار نشد؛ نمایش آخرین قیمت‌های ذخیره‌شده</span>';status.hidden=false}
+      $('#mktUpdated').textContent='کش محلی';
+      if(manual)toast('اتصال برقرار نشد؛ استفاده از کش','warn');
+      return;
+    }
+  }catch(e2){}
+  if(status){status.className='mkt-status err';status.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4m0 4h.01"/></svg><span>❌ دریافت قیمت ممکن نشد؛ اینترنت/فیلترشکن/آنتی‌ویروس طرف را بررسی کنید</span>';status.hidden=false}
+  $('#mktUpdated').textContent='خطا در دریافت';
+  if(manual)toast('دریافت قیمت‌ها ناموفق بود','err');
+
 }
 function renderMarket(){if(!marketCache)return;const f=v=>CUR==='rial'?v*10:v;['GBP','GOLD','G18','IMAMI','NIM','ROB'].forEach(k=>{const it=marketCache[k];const px=$('#px'+k);const ch=$('#chg'+k);if(!px)return;if(!it||!it.price){px.textContent='—';if(ch){ch.textContent='—';ch.className='mkt-change'}return}countUp(px,f(it.price));if(ch){const c=Number(it.change||0);ch.textContent=(c>0?'+':'')+nf1.format(c)+'٪';ch.className='mkt-change '+(c>0?'up':c<0?'down':'')}})}
 const marketRefreshBtn=$('#refreshMkt');if(marketRefreshBtn){marketRefreshBtn.onclick=()=>fetchMarket(true)}
