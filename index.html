@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="light">
+<head>
+  <link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#CC3333">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>محاسبه هوشمند — سامانه محاسبات مالی</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@700;800&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#CC3333;--primary-hover:#A61B29;--teal:#00A693;--blue:#1E4F9A;--ochre:#C99A45;--rose:#FE28A2;--lacquer:#860111;--neutral:#8A7A6E;--bg:#FFFDF8;--surface:#FAF5EA;--text:#2B2320;--text2:#8A7A6E;--border:#E7DCC8;--success:#007A6C;--warning:#B07E2C;--error:#860111;--gold:#C99A45;--shadow-1:0 1px 2px rgba(134,1,17,.06),0 4px 14px rgba(201,154,69,.10);--shadow-2:0 2px 4px rgba(134,1,17,.10),0 10px 28px rgba(30,79,154,.14);--font:'Vazirmatn','DM Sans',Tahoma,sans-serif;--font-display:'Vazirmatn','Nunito Sans',Tahoma,sans-serif;--font-mono:'JetBrains Mono','Vazirmatn',monospace}
+[data-theme="dark"]{--bg:#191010;--surface:#221913;--text:#F3E9DB;--text2:#C0AC9A;--neutral:#C0AC9A;--border:#43302A}
+*{margin:0;padding:0;box-sizing:border-box}[hidden]{display:none!important}
+::selection{background:rgba(201,154,69,.4)}
+body{font-family:var(--font);color:var(--text);font-size:14px;line-height:1.6;min-height:100vh;background-color:var(--surface);background-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='84'%20height='84'%20viewBox='0%200%2084%2084'%3E%3Cg%20fill='none'%20stroke='%23C99A45'%20stroke-opacity='.22'%3E%3Crect%20x='26'%20y='26'%20width='32'%20height='32'/%3E%3Crect%20x='26'%20y='26'%20width='32'%20height='32'%20transform='rotate(45%2042%2042)'/%3E%3Ccircle%20cx='42'%20cy='42'%20r='3'/%3E%3Cpath%20d='M42%200v12M42%2072v12M0%2042h12M72%2042h12'/%3E%3C/g%3E%3C/svg%3E"),radial-gradient(1100px 520px at 88% -8%,rgba(0,166,147,.10),transparent 60%),radial-gradient(900px 480px at -6% 24%,rgba(201,154,69,.12),transparent 60%),radial-gradient(1000px 560px at 50% 108%,rgba(204,51,51,.08),transparent 62%);background-attachment:fixed}
+.app{max-width:1280px;margin:0 auto;padding:0 24px}
+@media(min-width:1024px){.app{padding:0 40px}}
+.tile-band{height:8px;margin:8px 0 0;border-radius:9999px;background:repeating-linear-gradient(90deg,var(--teal) 0 28px,var(--ochre) 28px 56px,var(--primary) 56px 84px,var(--blue) 84px 112px);box-shadow:0 2px 8px rgba(134,1,17,.15)}
+.topbar{position:sticky;top:0;z-index:50;height:80px;margin:0 -24px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+@media(min-width:1024px){.topbar{margin:0 -40px;padding:0 40px}}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:44px;height:44px;border-radius:9999px;color:#fff;background:linear-gradient(135deg,var(--primary),var(--lacquer));display:grid;place-items:center;box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--ochre)}
+.brand-mark svg{width:22px;height:22px}
+.brand h1{font-family:var(--font-display);font-weight:800;font-size:22px}
+.brand h1 em{font-style:normal;color:var(--primary)}
+.brand small{display:block;font-size:12px;color:var(--text2)}
+.top-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.unit-switch{display:flex;height:40px;padding:3px;border-radius:9999px;background:var(--bg);border:1px solid var(--border)}
+.unit-opt{border:0;background:transparent;padding:0 16px;border-radius:9999px;font-family:var(--font);font-size:13px;font-weight:600;color:var(--text2);cursor:pointer}
+.unit-opt.active{background:var(--blue);color:#fff}
+.chip{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 16px;border-radius:9999px;background:var(--bg);border:1px solid var(--border);color:var(--text2);font-size:13px;font-weight:600}
+.chip b{color:var(--text);font-variant-numeric:tabular-nums}
+.icon-btn{width:44px;height:44px;border-radius:9999px;border:1px solid var(--border);background:var(--bg);color:var(--text);display:grid;place-items:center;cursor:pointer}
+.icon-btn:hover{border-color:var(--ochre);color:var(--ochre)}
+.icon-btn svg{width:19px;height:19px}
+[data-theme="dark"] .ic-moon{display:none}[data-theme="light"] .ic-sun{display:none}
+.ticker{margin-top:24px;background:var(--bg);border:1px solid var(--border);border-radius:9999px;overflow:hidden;position:relative}
+.ticker::before,.ticker::after{content:'';position:absolute;top:0;bottom:0;width:40px;z-index:2;pointer-events:none}
+.ticker::before{inset-inline-start:0;background:linear-gradient(to left,var(--bg),transparent)}
+.ticker::after{inset-inline-end:0;background:linear-gradient(to right,var(--bg),transparent)}
+.ticker-track{display:flex;width:max-content;animation:tickmove 46s linear infinite}
+.ticker:hover .ticker-track{animation-play-state:paused}
+.ticker-track span{white-space:nowrap;padding:10px 22px;font-size:13px;color:var(--text2)}
+.ticker-track span::after{content:'♥';color:var(--rose);margin-inline-start:12px;opacity:.8}
+@keyframes tickmove{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.tabs{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:32px 0 40px}
+.tab{display:inline-flex;align-items:center;gap:10px;height:48px;padding:8px 24px;border-radius:9999px;background:var(--bg);border:1px solid var(--border);color:var(--text);cursor:pointer;font-family:var(--font);font-size:15px;font-weight:600;transition:all .2s ease}
+.tab svg{width:18px;height:18px}
+.tab:hover{box-shadow:var(--shadow-1);transform:translateY(-1px);border-color:var(--ochre)}
+.tab.active{background:linear-gradient(135deg,var(--blue),var(--teal));color:#fff;border-color:transparent;box-shadow:0 4px 14px rgba(30,79,154,.35)}
+.panel{display:none}
+.panel.active{display:block;animation:panelIn .3s ease both}
+@keyframes panelIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.panel-card{background:var(--bg);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow-1);overflow:hidden;position:relative}
+.panel-card::before{content:'';display:block;height:6px;background:repeating-linear-gradient(90deg,var(--teal) 0 28px,var(--ochre) 28px 56px,var(--primary) 56px 84px,var(--blue) 84px 112px)}
+.panel-head{display:flex;align-items:center;gap:16px;padding:24px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.panel-ico{width:56px;height:56px;border-radius:9999px;color:var(--teal);background:rgba(0,166,147,.12);border:1px solid rgba(0,166,147,.3);display:grid;place-items:center;flex-shrink:0}
+.panel-ico svg{width:27px;height:27px}
+.panel-head h2{font-family:var(--font-display);font-weight:700;font-size:24px}
+.panel-head p{font-size:14px;color:var(--text2);margin-top:2px}
+.chip-formula{margin-inline-start:auto;font-family:var(--font-mono);font-size:12.5px;direction:ltr;color:var(--text2);background:var(--surface);border:1px solid var(--border);padding:6px 14px;border-radius:9999px}
+.panel-body{display:grid;grid-template-columns:420px 1fr}
+.panel-body.single{display:block}
+.calc-form{padding:24px;border-inline-end:1px solid var(--border)}
+.results{padding:24px;min-height:320px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field.wide{grid-column:1/-1}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px}
+.control{position:relative}
+.control input{width:100%;height:48px;padding:0 12px;padding-inline-end:74px;border-radius:8px;font-family:var(--font);font-size:15px;font-weight:500;color:var(--text);background:var(--bg);border:1px solid var(--border);font-variant-numeric:tabular-nums}
+.control input:focus{outline:0;border:2px solid var(--blue);padding-inline-end:73px}
+.unit{position:absolute;inset-inline-end:8px;font-size:11px;font-weight:600;color:var(--text2);background:var(--surface);border:1px solid var(--border);border-radius:9999px;padding:3px 10px;top:50%;transform:translateY(-50%)}
+.field .err{display:none;font-size:12.5px;color:var(--error);margin-top:6px}
+.field.invalid .err{display:block}
+.field.invalid input{border:2px solid var(--error)}
+.select-input{width:100%;height:48px;padding:0 12px;border-radius:8px;font-family:var(--font);font-size:14px;font-weight:600;color:var(--text);background:var(--bg);border:1px solid var(--border);cursor:pointer}
+.live-btn{border:0;background:rgba(0,166,147,.12);color:var(--teal);font-family:var(--font);font-size:11px;font-weight:700;cursor:pointer;padding:3px 10px;border-radius:9999px;margin-inline-start:8px}
+.live-btn:hover{background:rgba(0,166,147,.22)}
+.mode-switch{display:flex;gap:6px;padding:4px;border-radius:9999px;background:var(--surface);border:1px solid var(--border);margin-bottom:18px;flex-wrap:wrap}
+.mode-opt{flex:1;border:0;background:transparent;height:40px;min-width:110px;border-radius:9999px;font-family:var(--font);font-size:13px;font-weight:700;color:var(--text2);cursor:pointer;transition:all .2s}
+.mode-opt.active[data-mode="buy"]{background:linear-gradient(135deg,var(--teal),#007A6C);color:#fff;box-shadow:0 3px 10px rgba(0,166,147,.35)}
+.mode-opt.active[data-mode="sell"]{background:linear-gradient(135deg,var(--primary),var(--lacquer));color:#fff;box-shadow:0 3px 10px rgba(204,51,51,.35)}
+.mode-opt.active[data-mode="target"]{background:linear-gradient(135deg,var(--blue),var(--ochre));color:#fff;box-shadow:0 3px 10px rgba(30,79,154,.35)}
+#form-gold[data-mode="sell"] .only-buy,#form-gold[data-mode="target"] .only-buy{display:none}
+#form-gold[data-mode="buy"] .only-sell,#form-gold[data-mode="target"] .only-sell{display:none}
+#form-gold[data-mode="buy"] .only-target,#form-gold[data-mode="sell"] .only-target{display:none}
+.date-control{position:relative}
+.date-control input{padding-inline-end:56px;text-align:center}
+.date-btn{position:absolute;inset-inline-end:7px;top:7px;width:34px;height:34px;border-radius:9999px;border:0;background:var(--surface);color:var(--text2);display:grid;place-items:center;cursor:pointer}
+.jcal{position:absolute;top:calc(100% + 10px);inset-inline-start:0;z-index:60;width:310px;background:var(--bg);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-2);padding:16px}
+.jcal-head{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.jcal-head select{flex:1;height:36px;font-family:var(--font);font-size:13px;font-weight:600;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:0 8px;color:var(--text)}
+.jcal-nav{width:36px;height:36px;border-radius:9999px;border:1px solid var(--border);background:var(--bg);color:var(--text);display:grid;place-items:center;cursor:pointer}
+.jcal-nav svg{width:15px;height:15px}
+.jcal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.jcal-wd{font-size:12px;font-weight:600;color:var(--text2);text-align:center;padding:4px 0}
+.jcal-wd.fri{color:var(--primary)}
+.jcal-day{aspect-ratio:1;border:0;border-radius:8px;background:transparent;font-family:var(--font);font-size:14px;font-weight:500;color:var(--text);cursor:pointer;font-variant-numeric:tabular-nums}
+.jcal-day:hover{background:var(--surface)}
+.jcal-day.fri{color:var(--primary)}
+.jcal-day.today{border:1px solid var(--teal);color:var(--teal)}
+.jcal-day.selected{background:var(--primary);color:#fff;font-weight:700}
+.jcal-foot{display:flex;justify-content:space-between;margin-top:12px;padding-top:10px;border-top:1px solid var(--border)}
+.jcal-foot button{border:0;background:transparent;font-family:var(--font);font-size:13px;font-weight:600;color:var(--teal);cursor:pointer;padding:4px 10px;border-radius:8px}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px;padding-top:20px;border-top:1px solid var(--border)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 24px;border-radius:8px;cursor:pointer;font-family:var(--font);font-size:15px;font-weight:600;transition:all .15s ease;border:1px solid transparent}
+.btn svg{width:17px;height:17px}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--lacquer));color:#fff;border-color:transparent;box-shadow:0 4px 12px rgba(204,51,51,.3)}
+.btn-primary:hover{filter:brightness(1.1);box-shadow:0 6px 16px rgba(204,51,51,.4)}
+.btn-secondary{background:transparent;color:var(--blue);border-color:var(--blue)}
+.btn-secondary:hover{background:rgba(30,79,154,.08)}
+.btn-destructive{background:transparent;color:var(--error);border-color:var(--error)}
+.btn-destructive:hover{background:rgba(134,1,17,.08)}
+.spin svg{animation:rot 1s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+.form-note{margin-top:14px;font-size:12.5px;color:var(--text2);display:flex;gap:7px;align-items:center}
+.form-note::before{content:'♥';color:var(--rose);font-size:11px}
+.empty{border:2px dashed var(--ochre);border-radius:12px;padding:48px 24px;text-align:center;color:var(--text2);background:rgba(201,154,69,.05)}
+.empty svg{width:46px;height:46px;opacity:.6;margin-bottom:12px;color:var(--ochre)}
+.empty b{font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px;display:block}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px}
+a.stat,a.stat:hover,a.stat:visited,a.stat:focus{text-decoration:none;color:inherit;display:flex;gap:14px;align-items:flex-start;padding:20px 18px;background:var(--bg);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-1);transition:all .25s ease;position:relative;overflow:hidden}
+a.stat:hover{transform:translateY(-3px);box-shadow:var(--shadow-2);border-color:var(--ochre)}
+a.stat::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 60%,rgba(201,154,69,.10));opacity:0;transition:opacity .3s ease;pointer-events:none}
+a.stat:hover::before{opacity:1}
+.stat-link-badge{position:absolute;top:10px;inset-inline-end:10px;width:36px;height:36px;border-radius:9999px;background:linear-gradient(135deg,var(--primary),var(--lacquer));color:#fff;display:grid;place-items:center;box-shadow:0 2px 8px rgba(204,51,51,.35);transition:all .3s ease;z-index:2}
+a.stat:hover .stat-link-badge{transform:scale(1.15) rotate(-8deg);box-shadow:0 4px 14px rgba(204,51,51,.5)}
+.stat-link-badge svg{width:18px;height:18px}
+.stat-link-hint{position:absolute;bottom:10px;inset-inline-start:18px;font-size:10.5px;font-weight:600;color:var(--primary);opacity:0;transform:translateY(4px);transition:all .25s ease;display:flex;align-items:center;gap:4px;z-index:2}
+.stat-link-hint svg{width:11px;height:11px}
+a.stat:hover .stat-link-hint{opacity:1;transform:translateY(0)}
+.flag-card{display:flex!important;align-items:center!important;gap:18px!important;padding:16px 18px!important;min-height:90px;background:linear-gradient(135deg,rgba(201,154,69,.10),var(--bg) 55%)!important;position:relative!important;overflow:hidden!important}
+.flag-img{width:72px;height:48px;border-radius:8px;background-size:cover;background-position:center;background-repeat:no-repeat;flex-shrink:0;box-shadow:0 4px 14px rgba(0,0,0,.18),0 0 0 2px var(--bg),0 0 0 4px var(--ochre);transition:all .3s ease}
+.flag-card:hover .flag-img{transform:scale(1.08) rotate(-2deg)}
+.flag-info{flex:1;display:flex;flex-direction:column;gap:2px}
+.flag-name{font-family:var(--font-display);font-size:16px;font-weight:800;color:var(--text);line-height:1.3}
+.flag-sub{font-size:11.5px;color:var(--text2);font-weight:500}
+.flag-card::after{content:'';position:absolute;top:50%;inset-inline-end:18px;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;background:var(--surface);transition:all .3s ease}
+.flag-card:hover::after{background:var(--primary)}
+.flag-card::before{content:'←';position:absolute;top:50%;inset-inline-end:24px;transform:translateY(-50%);color:var(--text2);font-size:18px;font-weight:700;transition:all .3s ease;z-index:3}
+.flag-card:hover::before{color:#fff;inset-inline-end:25px}
+.stat{display:flex;gap:14px;align-items:flex-start;padding:20px 18px;background:var(--bg);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-1);transition:all .2s ease;position:relative}
+.stat:hover{transform:translateY(-2px);box-shadow:var(--shadow-2)}
+.stat-ic{width:42px;height:42px;border-radius:9999px;flex-shrink:0;display:grid;place-items:center;color:var(--sa,var(--teal));background:color-mix(in srgb,var(--sa,var(--teal)) 12%,transparent)}
+.stat-ic svg{width:20px;height:20px}
+.stat-label{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.stat-sub{font-size:10.5px;color:var(--text2);opacity:.75;display:block;margin-top:-4px;margin-bottom:6px;font-weight:400}
+.stat-val{display:flex;align-items:baseline;gap:4px;flex-wrap:wrap;font-family:var(--font-display);font-size:17px;font-weight:800;line-height:1.5;color:var(--text);font-variant-numeric:tabular-nums}
+.stat-val small{font-size:11px;color:var(--text2);font-weight:500;white-space:nowrap}
+.stat-val.neg{color:var(--error)}
+.stat.hl{border-color:rgba(201,154,69,.55);background:linear-gradient(180deg,rgba(204,51,51,.06),var(--bg))}
+.heart-badge{width:26px;height:26px;border-radius:9999px;background:linear-gradient(135deg,var(--rose),var(--primary));color:#fff;display:grid;place-items:center;box-shadow:var(--shadow-1)}
+.heart-badge svg{width:13px;height:13px}
+.mkt-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:24px}
+.mkt-updated{font-size:12.5px;color:var(--text2)}
+.mkt-src{margin-inline-start:auto;font-size:12.5px;font-weight:600;color:var(--teal);text-decoration:none}
+.mkt-src:hover{text-decoration:underline}
+.mkt-change{font-size:11.5px;font-weight:700;padding:2px 10px;border-radius:9999px;background:var(--surface);color:var(--text2);border:1px solid var(--border);margin-inline-start:8px}
+.mkt-change.up{color:var(--success);border-color:rgba(0,166,147,.4);background:rgba(0,166,147,.1)}
+.mkt-change.down{color:var(--error);border-color:rgba(134,1,17,.4);background:rgba(134,1,17,.08)}
+.mkt-status{padding:14px 18px;border-radius:12px;font-size:13.5px;font-weight:500;margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.mkt-status svg{width:18px;height:18px;flex-shrink:0}
+.mkt-status.ok{background:rgba(0,166,147,.1);color:var(--success);border:1px solid rgba(0,166,147,.3)}
+.mkt-status.warn{background:rgba(201,154,69,.12);color:var(--warning);border:1px solid rgba(201,154,69,.35)}
+.mkt-status.err{background:rgba(134,1,17,.08);color:var(--error);border:1px solid rgba(134,1,17,.3)}
+.mkt-group-title{font-family:var(--font-display);font-weight:700;font-size:16px;margin:24px 0 14px;color:var(--text);display:flex;align-items:center;gap:10px}
+.mkt-group-title::before{content:'';flex:0 0 4px;height:20px;border-radius:4px;background:linear-gradient(180deg,var(--ochre),var(--primary))}
+.mkt-group-title svg{width:20px;height:20px;color:var(--primary)}
+.ratio{margin-top:24px;padding:20px;border:1px solid var(--border);border-radius:12px;background:var(--bg);box-shadow:var(--shadow-1)}
+.ratio-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:12px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.ratio-bar{height:12px;border-radius:9999px;overflow:hidden;display:flex;background:var(--surface);border:1px solid var(--border)}
+.ratio-bar i{display:block;height:100%;transition:width .8s ease}
+.c1{background:var(--teal)}.c2{background:var(--primary)}.c3{background:var(--ochre)}.c4{background:var(--blue)}
+.ratio-legend{display:flex;flex-wrap:wrap;gap:16px;font-size:13px;color:var(--text2);margin-top:12px}
+.ratio-legend i{display:inline-block;width:9px;height:9px;border-radius:9999px;margin-inline-end:6px}
+.ratio-legend b{color:var(--text);font-variant-numeric:tabular-nums}
+.table-wrap{margin-top:24px;border:1px solid var(--border);border-radius:12px;overflow:auto;max-height:430px;background:var(--bg);box-shadow:var(--shadow-1)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+thead th{position:sticky;top:0;z-index:2;background:linear-gradient(180deg,rgba(201,154,69,.16),var(--surface));color:var(--text2);font-size:12px;font-weight:600;padding:14px 16px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--border)}
+tbody td{padding:12px 16px;border-bottom:1px solid var(--border);font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--text)}
+tbody td:first-child{font-weight:700;color:var(--primary)}
+tbody tr:hover{background:rgba(0,166,147,.06)}
+tfoot td{position:sticky;bottom:0;background:var(--surface);font-weight:700;color:var(--text);padding:14px 16px;border-top:1px solid var(--border);font-variant-numeric:tabular-nums;white-space:nowrap}
+.credit{margin-top:24px;padding:32px 10px 24px;text-align:center;color:var(--text2);font-size:15px}
+.credit .made{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.credit .heart{color:var(--rose);animation:heartbeat 1.6s ease-in-out infinite}
+@keyframes heartbeat{0%,100%{transform:scale(1)}25%{transform:scale(1.25)}40%{transform:scale(1)}}
+.majik{font-family:var(--font-display);font-size:24px;font-weight:800;letter-spacing:3px;color:var(--lacquer)}
+[data-theme="dark"] .majik{color:var(--ochre)}
+.credit small{display:block;margin-top:8px;font-size:12.5px;color:var(--neutral)}
+.toasts{position:fixed;bottom:20px;inset-inline-start:20px;z-index:99;display:flex;flex-direction:column;gap:10px;max-width:min(360px,90vw)}
+.toast{display:flex;gap:11px;align-items:center;background:var(--bg);border:1px solid var(--border);border-inline-start:4px solid var(--error);padding:14px 18px;border-radius:12px;box-shadow:var(--shadow-2);font-size:14px;font-weight:500;color:var(--text);animation:toastIn .25s ease}
+.toast svg{width:18px;height:18px;flex-shrink:0;color:var(--error)}
+.toast.ok{border-inline-start-color:var(--teal)}.toast.ok svg{color:var(--teal)}
+.toast.warn{border-inline-start-color:var(--warning)}.toast.warn svg{color:var(--warning)}
+.toast.out{opacity:0;transition:all .3s}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}}
+@media(max-width:1000px){.panel-body{grid-template-columns:1fr}.calc-form{border-inline-end:0;border-bottom:1px solid var(--border)}.chip-formula{display:none}}
+@media(max-width:640px){
+  .app{padding:0 16px}
+  .topbar{margin:0 -16px;padding:0 16px;height:70px}
+  .tile-band{margin:0 -16px}
+  .brand-mark{width:38px;height:38px}
+  .brand-mark svg{width:19px;height:19px}
+  .brand h1{font-size:17px}
+  .chip.date-chip{display:none}
+  .unit-switch{height:38px}
+  .unit-opt{padding:0 12px;font-size:12px}
+  .icon-btn{width:38px;height:38px}
+  .icon-btn svg{width:17px;height:17px}
+  .ticker{margin-top:16px}
+  .ticker-track span{font-size:12px;padding:8px 16px}
+  .tabs{gap:8px;margin:20px 0 24px}
+  .tab{height:42px;padding:6px 14px;font-size:13px;gap:6px}
+  .tab svg{width:16px;height:16px}
+  .panel-head{padding:16px;gap:12px}
+  .panel-ico{width:44px;height:44px}
+  .panel-ico svg{width:22px;height:22px}
+  .panel-head h2{font-size:19px}
+  .panel-head p{font-size:12.5px}
+  .calc-form{padding:16px}
+  .results{padding:16px;min-height:0}
+  .fields{grid-template-columns:1fr 1fr;gap:12px}
+  .field.wide{grid-column:1/-1}
+  .control input{height:46px;font-size:16px}
+  .select-input{height:46px;font-size:15px}
+  .actions{gap:8px;margin-top:16px;padding-top:16px}
+  .btn{height:46px;font-size:14px;padding:0 16px}
+  .stats{grid-template-columns:1fr 1fr;gap:12px}
+  .stat{padding:14px 12px;gap:10px}
+  .stat-ic{width:36px;height:36px}
+  .stat-ic svg{width:18px;height:18px}
+  .stat-val{font-size:15px}
+  .stat-label{font-size:11px}
+  .stat-link-badge{width:30px;height:30px}
+  .stat-link-badge svg{width:15px;height:15px}
+  .flag-card{gap:12px;min-height:78px}
+  .flag-card::before,.flag-card::after{display:none}
+  .flag-img{width:56px;height:38px}
+  .flag-name{font-size:14px}
+  .mode-switch{gap:4px}
+  .mode-opt{min-width:0;font-size:12px;height:38px}
+  .jcal{width:min(310px,calc(100vw - 48px))}
+  .mkt-bar{gap:10px}
+  .table-wrap{max-height:340px}
+  thead th{padding:10px;font-size:11px}
+  tbody td{padding:10px;font-size:12.5px}
+  tfoot td{padding:10px;font-size:12.5px}
+  .credit{margin-top:32px;padding:24px 8px 20px}
+  .majik{font-size:20px}
+}
+#printArea{display:none}
+@media print{@page{size:A4;margin:12mm}body{background:#fff!important}body>*:not(#printArea){display:none!important}#printArea{display:block!important;direction:rtl;font-family:var(--font);color:#222;font-size:14px}.rp-head{display:flex;justify-content:space-between;border-bottom:3px solid #CC3333;padding-bottom:12px;margin-bottom:15px}.rp-brand{font-weight:800;color:#CC3333}.rp-title{font-family:var(--font-display);font-size:24px;font-weight:800;margin-top:3px}.rp-meta{text-align:left;font-size:11px;color:#717171;line-height:2}.rp-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:15px}.rp-stat{border:1px solid #DDD;border-radius:8px;padding:10px 12px;background:#F7F7F7;print-color-adjust:exact;-webkit-print-color-adjust:exact}.rp-stat span{display:block;font-size:10.5px;color:#717171;margin-bottom:4px;font-weight:600}.rp-stat b{font-size:15px;font-variant-numeric:tabular-nums}.rp table{width:100%;border-collapse:collapse;font-size:11px;margin-top:4px}.rp th{background:#F7F7F7;border:1px solid #DDD;padding:6px 8px;print-color-adjust:exact;-webkit-print-color-adjust:exact}.rp td{border:1px solid #DDD;padding:5px 8px;text-align:right;font-variant-numeric:tabular-nums}.rp-foot{margin-top:20px;padding-top:10px;border-top:1px solid #DDD;text-align:center;font-size:11px;color:#717171}.rp-foot b{color:#CC3333;letter-spacing:3px;font-size:14px;font-weight:800}}
+/* ═══ بهینه‌سازی موبایل و دسکتاپ ═══ */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{-webkit-tap-highlight-color:transparent}
+button,input,select{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+@media(max-width:1000px){
+  .panel-body{grid-template-columns:1fr}
+  .calc-form{border-inline-end:0;border-bottom:1px solid var(--border)}
+  .chip-formula{display:none}
+}
+@media(max-width:640px){
+  .app{padding:0 16px}
+  .topbar{margin:0 -16px;padding:0 16px;height:70px}
+  .tile-band{margin:0 -16px}
+  .brand-mark{width:38px;height:38px}
+  .brand-mark svg{width:19px;height:19px}
+  .brand h1{font-size:17px}
+  .chip.date-chip{display:none}
+  .unit-switch{height:38px}
+  .unit-opt{padding:0 12px;font-size:12px}
+  .icon-btn{width:38px;height:38px}
+  .icon-btn svg{width:17px;height:17px}
+  .ticker{margin-top:16px}
+  .ticker-track span{font-size:12px;padding:8px 16px}
+  .tabs{gap:8px;margin:20px 0 24px}
+  .tab{height:42px;padding:6px 14px;font-size:13px;gap:6px}
+  .tab svg{width:16px;height:16px}
+  .panel-head{padding:16px;gap:12px}
+  .panel-ico{width:44px;height:44px}
+  .panel-ico svg{width:22px;height:22px}
+  .panel-head h2{font-size:19px}
+  .panel-head p{font-size:12.5px}
+  .calc-form{padding:16px}
+  .results{padding:16px;min-height:0}
+  .fields{grid-template-columns:1fr;gap:12px}
+  .field.wide{grid-column:auto}
+  .control input{height:46px;font-size:16px}
+  .select-input{height:46px;font-size:15px}
+  .actions{gap:8px;margin-top:16px;padding-top:16px}
+  .btn{height:46px;font-size:14px;padding:0 16px}
+  .stats{grid-template-columns:1fr 1fr;gap:12px}
+  .stat{padding:14px 12px;gap:10px}
+  .stat-ic{width:36px;height:36px}
+  .stat-ic svg{width:18px;height:18px}
+  .stat-val{font-size:15px}
+  .stat-label{font-size:11px}
+  .stat-link-badge{width:30px;height:30px}
+  .stat-link-badge svg{width:15px;height:15px}
+  .flag-card{gap:12px;min-height:78px}
+  .flag-card::before,.flag-card::after{display:none}
+  .flag-img{width:56px;height:38px}
+  .flag-name{font-size:14px}
+  .mode-switch{gap:4px}
+  .mode-opt{min-width:0;font-size:12px;height:38px}
+  .jcal{width:min(310px,calc(100vw - 48px))}
+  .mkt-bar{gap:10px}
+  .table-wrap{max-height:340px}
+  thead th{padding:10px;font-size:11px}
+  tbody td{padding:10px;font-size:12.5px}
+  tfoot td{padding:10px;font-size:12.5px}
+  .credit{margin-top:32px;padding:24px 8px 20px}
+  .majik{font-size:20px}
+}
+@media(max-width:480px){
+  .stats{grid-template-columns:1fr}
+  .top-tools{gap:8px}
+  .unit-opt{padding:0 10px;font-size:11px}
+  .tab{padding:6px 10px;font-size:12px}
+}
+/* ═══ اصلاح سرریز جدول وام در موبایل ═══ */
+.panel-body>*{min-width:0;max-width:100%}
+.calc-form,.results{min-width:0;max-width:100%}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+html,body{overflow-x:clip}
+@media(max-width:640px){
+  table{font-size:12.5px}
+  thead th{padding:10px 8px;font-size:10.5px}
+  tbody td{padding:10px 8px;font-size:12px}
+  tfoot td{padding:10px 8px;font-size:12px}
+}
+/* ═══ چیدمان قطعی فرم طلا ═══ */
+#form-gold .fields{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+#form-gold .field.wide{grid-column:1/-1}
+#form-gold[data-mode="buy"] .only-target,#form-gold[data-mode="sell"] .only-target{display:none}
+#form-gold[data-mode="buy"] .only-sell,#form-gold[data-mode="target"] .only-sell{display:none}
+#form-gold[data-mode="sell"] .only-buy,#form-gold[data-mode="target"] .only-buy{display:none}
+@media(max-width:640px){#form-gold .fields{grid-template-columns:1fr 1fr;gap:12px}}
+@media(max-width:480px){#form-gold .fields{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7.5-4.7-9.5-9C1 8.5 3 5 6.5 5c2 0 3.5 1 4.5 2.5C12 6 13.5 5 15.5 5 19 5 21 8.5 20.5 12c-1 4.3-8.5 9-8.5 9Z"/></svg></div>
+      <div><h1>محاسبه <em>هوشمند</em></h1><small>سامانه محاسبات مالی</small></div>
+    </div>
+    <div class="top-tools">
+      <div class="unit-switch" role="group"><button type="button" class="unit-opt active" data-unit="toman">تومان</button><button type="button" class="unit-opt" data-unit="rial">ریال</button></div>
+      <div class="chip date-chip"><span id="faDate"></span><b id="faTime"></b></div>
+      <button class="icon-btn" id="themeBtn" aria-label="تغییر حالت"><svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/></svg><svg class="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
+    </div>
+  </header>
+  <div class="tile-band"></div>
+  <div class="ticker" aria-hidden="true"><div class="ticker-track" id="tickerTrack"></div></div>
+  <nav class="tabs">
+    <button class="tab active" data-tab="loan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M3 22h18"/><path d="M6 18v-7M10 18v-7M14 18v-7M18 18v-7"/><path d="M12 2 3 7v2h18V7Z"/></svg>ماشین حساب وام</button>
+    <button class="tab" data-tab="salary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg>ماشین حساب حقوق</button>
+    <button class="tab" data-tab="sales"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>سود فروش</button>
+    <button class="tab" data-tab="gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 3h12l4 6-10 12L2 9Z"/><path d="M2 9h20"/><path d="M12 21 8 9l2.5-6"/><path d="m12 21 4-12-2.5-6"/></svg>ماشین حساب طلا</button>
+    <button class="tab" data-tab="market"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M18.1 10.4A6 6 0 1 1 10.3 18"/><path d="M7 6h1v4"/></svg>قیمت روز بازار</button>
+  </nav>
+  <main>
+    <section class="panel active" id="panel-loan"><div class="panel-card"><div class="panel-head"><div class="panel-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M3 22h18"/><path d="M6 18v-7M10 18v-7M14 18v-7M18 18v-7"/><path d="M12 2 3 7v2h18V7Z"/></svg></div><div><h2>ماشین حساب وام</h2><p>محاسبه قسط ماهانه و جدول بازپرداخت با تاریخ شمسی</p></div><span class="chip-formula">PMT = P·r / (1−(1+r)⁻ⁿ)</span></div>
+      <div class="panel-body"><form class="calc-form" id="form-loan" novalidate><div class="fields">
+        <div class="field wide"><label>مبلغ وام</label><div class="control"><input type="text" inputmode="decimal" id="loanAmount" data-num="dec" placeholder="۵۰۰۰۰۰۰۰۰"><span class="unit" data-cur>تومان</span></div><p class="err"></p></div>
+        <div class="field"><label>نرخ سود سالیانه</label><div class="control"><input type="text" inputmode="decimal" id="loanRate" data-num="dec" placeholder="۲۳"><span class="unit">٪</span></div><p class="err"></p></div>
+        <div class="field"><label>مدت بازپرداخت</label><div class="control"><input type="text" inputmode="numeric" id="loanMonths" data-num="int" placeholder="۶۰"><span class="unit">ماه</span></div><p class="err"></p></div>
+        <div class="field wide"><label>تاریخ شروع اقساط</label><div class="control date-control"><input type="text" inputmode="numeric" id="loanDate" placeholder="۱۴۰۵/۰۶/۱۵"><button type="button" class="date-btn" id="loanDateBtn" aria-label="تقویم"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></button><div class="jcal" id="jcal" hidden></div></div><p class="err"></p></div>
+      </div><div class="actions"><button type="button" class="btn btn-destructive" data-action="clear" data-tool="loan">پاک‌کردن</button><button type="button" class="btn btn-secondary" data-action="print">چاپ</button><button type="button" class="btn btn-primary" data-action="pdf">ذخیره PDF</button></div></form>
+      <div class="results"><div class="empty" id="emptyLoan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="2" width="16" height="20" rx="2"/></svg><b>هنوز نتیجه‌ای محاسبه نشده</b><span>مقادیر را وارد کنید</span></div>
+        <div class="res" id="resLoan" hidden><div class="stats">
+          <div class="stat hl"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div><div><div class="stat-label">مبلغ هر قسط <span class="heart-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.7-9.5-9C1 8.5 3 5 6.5 5c2 0 3.5 1 4.5 2.5C12 6 13.5 5 15.5 5 19 5 21 8.5 20.5 12c-1 4.3-8.5 9-8.5 9Z"/></svg></span></div><div class="stat-val"><span id="loanPmt">۰</span><small data-cur>تومان</small></div></div></div>
+          <div class="stat" style="--sa:#B07E2C"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></div><div><div class="stat-label">مجموع سود پرداختی</div><div class="stat-val"><span id="loanInt">۰</span><small data-cur>تومان</small></div></div></div>
+          <div class="stat" style="--sa:var(--teal)"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6"/><path d="M18.1 10.4A6 6 0 1 1 10.3 18"/></svg></div><div><div class="stat-label">مجموع بازپرداخت</div><div class="stat-val"><span id="loanPay">۰</span><small data-cur>تومان</small></div></div></div>
+          <div class="stat" style="--sa:var(--primary)"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg></div><div><div class="stat-label">تعداد اقساط</div><div class="stat-val"><span id="loanCnt">۰</span><small>قسط</small></div></div></div>
+        </div><div class="ratio"><div class="ratio-title"><span>ترکیب بازپرداخت</span><span id="loanRatioTxt"></span></div><div class="ratio-bar"><i class="c1" id="barPrin"></i><i class="c2" id="barInt"></i></div><div class="ratio-legend"><span><i class="c1"></i>اصل: <b id="lblPrin">—</b></span><span><i class="c2"></i>سود: <b id="lblInt">—</b></span></div></div>
+        <div class="table-wrap"><table><thead><tr><th>قسط</th><th>تاریخ</th><th>مبلغ</th><th>سود</th><th>اصل</th><th>مانده</th></tr></thead><tbody id="loanBody"></tbody><tfoot><tr><td colspan="2">جمع</td><td id="footPay">—</td><td id="footInt">—</td><td id="footPrin">—</td><td>—</td></tr></tfoot></table></div>
+      </div></div></div></section>
+
+    <section class="panel" id="panel-salary"><div class="panel-card"><div class="panel-head"><div class="panel-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg></div><div><h2>ماشین حساب حقوق</h2><p>محاسبه لحظه‌ای حقوق ناخالص و خالص</p></div><span class="chip-formula">Net = Base + Benefits − Deductions</span></div>
+      <div class="panel-body"><form class="calc-form" id="form-salary" novalidate><div class="fields">
+        <div class="field wide"><label>حقوق پایه</label><div class="control"><input type="text" inputmode="decimal" id="base" data-num="dec"><span class="unit" data-cur>تومان</span></div><p class="err"></p></div>
+        <div class="field"><label>ساعات اضافه‌کار</label><div class="control"><input type="text" inputmode="numeric" id="otHours" data-num="int"><span class="unit">ساعت</span></div><p class="err"></p></div>
+        <div class="field"><label>نرخ ساعت اضافه‌کار</label><div class="control"><input type="text" inputmode="decimal" id="otRate" data-num="dec"><span class="unit" data-cur>تومان</span></div><p class="err"></p></div>
+        <div class="field"><label>حق مسکن</label><div class="control"><input type="text" inputmode="decimal" id="housing" data-num="dec"><span class="unit" data-cur>تومان</span></div><p class="err"></p></div>
+        <div class="field"><label>حق بن</label><div class="control"><input type="text" inputmode="decimal" id="bon" data-num="dec"><span class="unit" data-cur>تومان</span></div><p class="err"></p></div>
+        <div class="field"><label>حق اولاد</label><div class="control"><input type="text" inputmode="decimal" id="kids" data-num="dec"><span class="unit" data-cur>تومان</span></div><p class="err"></p></div>
+        <div class="field"><label>پاداش</label><div class="control"><input type="text" inputmode="decimal" id="bonus" data-num="dec"><span class="unit" data-cur>تومان</span></div><p class="err"></p></div>
+        <div class="field"><label>بیمه</label><div class="control"><input type="text" inputmode="decimal" id="ins" data-num="dec"><span class="unit" data-cur>تومان</span></div><p class="err"></p></div>
+        <div class="field"><label>مالیات</label><div class="control"><input type="text" inputmode="decimal" id="tax" data-num="dec"><span class="unit" data-cur>تومان</span></div><p class="err"></p></div>
+        <div class="field"><label>سایر کسورات</label><div class="control"><input type="text" inputmode="decimal" id="misc" data-num="dec"><span class="unit" data-cur>تومان</span></div><p class="err"></p></div>
+      </div><div class="actions"><button type="button" class="btn btn-destructive" data-action="clear" data-tool="salary">پاک‌کردن</button><button type="button" class="btn btn-secondary" data-action="print">چاپ</button><button type="button" class="btn btn-primary" data-action="pdf">ذخیره PDF</button></div></form>
+      <div class="results"><div class="empty" id="emptySalary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="2" width="16" height="20" rx="2"/></svg><b>هنوز نتیجه‌ای محاسبه نشده</b><span>اقلام حقوقی را وارد کنید</span></div>
+        <div class="res" id="resSalary" hidden><div class="stats">
+          <div class="stat" style="--sa:var(--success)"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg></div><div><div class="stat-label">مجموع مزایا</div><div class="stat-val"><span id="salBen">۰</span><small data-cur>تومان</small></div></div></div>
+          <div class="stat" style="--sa:var(--error)"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 12h8"/></svg></div><div><div class="stat-label">مجموع کسورات</div><div class="stat-val"><span id="salDed">۰</span><small data-cur>تومان</small></div></div></div>
+          <div class="stat" style="--sa:#B07E2C"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/></svg></div><div><div class="stat-label">حقوق ناخالص</div><div class="stat-val"><span id="salGross">۰</span><small data-cur>تومان</small></div></div></div>
+          <div class="stat hl"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></svg></div><div><div class="stat-label">حقوق خالص دریافتی <span class="heart-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.7-9.5-9C1 8.5 3 5 6.5 5c2 0 3.5 1 4.5 2.5C12 6 13.5 5 15.5 5 19 5 21 8.5 20.5 12c-1 4.3-8.5 9-8.5 9Z"/></svg></span></div><div class="stat-val"><span id="salNet">۰</span><small data-cur>تومان</small></div></div></div>
+        </div><div class="ratio" id="salRatio"><div class="ratio-title"><span>ترکیب ناخالص</span></div><div class="ratio-bar" id="salBar"></div><div class="ratio-legend" id="salLegend"></div></div>
+      </div></div></div></section>
+
+    <section class="panel" id="panel-sales"><div class="panel-card"><div class="panel-head"><div class="panel-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div><div><h2>ماشین حساب سود فروش</h2><p>تحلیل قیمت‌گذاری، تخفیف و حاشیه سود</p></div><span class="chip-formula">Margin = NetProfit / Cost × 100</span></div>
+      <div class="panel-body"><form class="calc-form" id="form-sales" novalidate><div class="fields">
+        <div class="field"><label>قیمت خرید کالا</label><div class="control"><input type="text" inputmode="decimal" id="buy" data-num="dec"><span class="unit" data-cur>تومان</span></div><p class="err"></p></div>
+        <div class="field"><label>قیمت فروش کالا</label><div class="control"><input type="text" inputmode="decimal" id="sell" data-num="dec"><span class="unit" data-cur>تومان</span></div><p class="err"></p></div>
+        <div class="field"><label>تعداد فروش</label><div class="control"><input type="text" inputmode="numeric" id="qty" data-num="int"><span class="unit">عدد</span></div><p class="err"></p></div>
+        <div class="field"><label>درصد تخفیف</label><div class="control"><input type="text" inputmode="decimal" id="disc" data-num="dec"><span class="unit">٪</span></div><p class="err"></p></div>
+        <div class="field"><label>پورسانت فروشنده</label><div class="control"><input type="text" inputmode="decimal" id="comm" data-num="dec"><span class="unit">٪</span></div><p class="err"></p></div>
+      </div><div class="actions"><button type="button" class="btn btn-destructive" data-action="clear" data-tool="sales">پاک‌کردن</button><button type="button" class="btn btn-secondary" data-action="print">چاپ</button><button type="button" class="btn btn-primary" data-action="pdf">ذخیره PDF</button></div></form>
+      <div class="results"><div class="empty" id="emptySales"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="2" width="16" height="20" rx="2"/></svg><b>هنوز نتیجه‌ای محاسبه نشده</b><span>قیمت‌ها و تعداد را وارد کنید</span></div>
+        <div class="res" id="resSales" hidden><div class="stats">
+          <div class="stat" style="--sa:var(--teal)"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2H2v10l9.3 9.3a1 1 0 0 0 1.4 0l8.6-8.6a1 1 0 0 0 0-1.4Z"/></svg></div><div><div class="stat-label">مبلغ فروش</div><div class="stat-val"><span id="sGross">۰</span><small data-cur>تومان</small></div></div></div>
+          <div class="stat" style="--sa:#B07E2C"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/></svg></div><div><div class="stat-label">مبلغ تخفیف</div><div class="stat-val"><span id="sDisc">۰</span><small data-cur>تومان</small></div></div></div>
+          <div class="stat" style="--sa:var(--success)"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg></div><div><div class="stat-label">سود هر کالا</div><div class="stat-val"><span id="sUnit">۰</span><small data-cur>تومان</small></div></div></div>
+          <div class="stat" style="--sa:var(--teal)"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg></div><div><div class="stat-label">سود کل</div><div class="stat-val"><span id="sProfit">۰</span><small data-cur>تومان</small></div></div></div>
+          <div class="stat" style="--sa:var(--warning)"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg></div><div><div class="stat-label">پورسانت فروشنده</div><div class="stat-val"><span id="sComm">۰</span><small data-cur>تومان</small></div></div></div>
+          <div class="stat" style="--sa:var(--primary)"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/></svg></div><div><div class="stat-label">درصد سود واقعی</div><div class="stat-val"><span id="sMargin">۰</span><small>٪</small></div></div></div>
+          <div class="stat hl"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12l4 6-10 12L2 9Z"/><path d="M2 9h20"/></svg></div><div><div class="stat-label">سود خالص <span class="heart-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.7-9.5-9C1 8.5 3 5 6.5 5c2 0 3.5 1 4.5 2.5C12 6 13.5 5 15.5 5 19 5 21 8.5 20.5 12c-1 4.3-8.5 9-8.5 9Z"/></svg></span></div><div class="stat-val"><span id="sNet">۰</span><small data-cur>تومان</small></div></div></div>
+        </div></div></div></div></section>
+
+    <section class="panel" id="panel-gold"><div class="panel-card"><div class="panel-head"><div class="panel-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M6 3h12l4 6-10 12L2 9Z"/><path d="M2 9h20"/></svg></div><div><h2>ماشین حساب طلا</h2><p>خرید، فروش دست‌دوم و محاسبه قیمت هدف</p></div><span class="chip-formula">Sell = W × (P × 740/750)</span></div>
+  <div class="panel-body"><form class="calc-form" id="form-gold" data-mode="buy" novalidate>
+    <div class="mode-switch"><button type="button" class="mode-opt active" data-mode="buy">🛒 خرید طلا</button><button type="button" class="mode-opt" data-mode="sell">💰 فروش دست‌دوم</button><button type="button" class="mode-opt" data-mode="target">🎯 قیمت هدف</button></div>
+    <div class="fields">
+      <div class="field"><label>وزن کل طلا</label><div class="control"><input type="text" inputmode="decimal" id="goldWeight" data-num="dec" placeholder="۵"><span class="unit">گرم</span></div><p class="err"></p></div>
+      <div class="field"><label>وزن غیر طلا (سنگ و…)</label><div class="control"><input type="text" inputmode="decimal" id="goldStone" data-num="dec" placeholder="۰"><span class="unit">گرم</span></div><p class="err"></p></div>
+      <div class="field wide"><label><span id="goldPriceLabel">قیمت یک گرم طلای ۱۸ عیار</span> <button type="button" class="live-btn" id="goldLiveBtn">⟳ قیمت روز</button></label><div class="control"><input type="text" inputmode="decimal" id="goldPrice" data-num="dec"><span class="unit" data-cur>تومان</span></div><p class="form-note" id="goldLiveHint" style="margin-top:6px"></p><p class="err"></p></div>
+      <div class="field"><label>عیار طلا</label><div class="control"><select id="goldKarat" class="select-input"><option value="18" selected>۱۸ عیار (۷۵۰)</option><option value="24">۲۴ عیار (۹۹)</option></select></div><p class="err"></p></div>
+      <div class="field only-buy"><label>اجرت ساخت</label><div class="control"><input type="text" inputmode="decimal" id="goldOjrat" data-num="dec"><span class="unit">٪</span></div><p class="err"></p></div>
+      <div class="field only-buy"><label>سود فروشنده</label><div class="control"><input type="text" inputmode="decimal" id="goldSood" data-num="dec"><span class="unit">٪</span></div><p class="err"></p></div>
+      <div class="field only-buy"><label>مالیات ارزش افزوده</label><div class="control"><input type="text" inputmode="decimal" id="goldTax" data-num="dec"><span class="unit">٪</span></div><p class="err"></p></div>
+      <div class="field only-buy"><label>تخفیف</label><div class="control"><input type="text" inputmode="decimal" id="goldDisc" data-num="dec"><span class="unit">٪</span></div><p class="err"></p></div>
+      <div class="field wide only-target"><label>مبلغ هدف (چند می‌خواهی بگیری؟)</label><div class="control"><input type="text" inputmode="decimal" id="goldTarget" data-num="dec" placeholder="۲۰۰۰۰۰۰"><span class="unit" data-cur>تومان</span></div><p class="err"></p></div>
+      <div class="field wide only-target"><label>قیمت خرید هر گرم (چند خریدی؟)</label><div class="control"><input type="text" inputmode="decimal" id="goldBuyPrice" data-num="dec" placeholder="۲۲۰۰۰۰۰۰"><span class="unit" data-cur>تومان</span></div><p class="err"></p></div>
+      <div class="field"><label>کسر هنگام فروش</label><div class="control"><input type="text" inputmode="decimal" id="goldKasr" data-num="dec"><span class="unit">٪</span></div><p class="err"></p></div>
+    </div>
+    <p class="form-note only-buy">مالیات بر ارزش افزوده ۱۰٪ فقط به اجرت ساخت و سود فروشنده تعلق می‌گیرد</p>
+    <p class="form-note only-sell">فرمول فروش دست‌دوم: وزن خالص × (قیمت گرم ۱۸ عیار × ۷۴  ۷۵۰)</p>
+    <p class="form-note only-target">قیمت لازم طلا = مبلغ هدف ÷ (وزن خالص × ۷۴  ۷۵۰)</p>
+    <div class="actions"><button type="button" class="btn btn-destructive" data-action="clear" data-tool="gold">پاک‌کردن</button><button type="button" class="btn btn-secondary" data-action="print">چاپ</button><button type="button" class="btn btn-primary" data-action="pdf">ذخیره PDF</button></div></form>
+  <div class="results"><div class="empty" id="emptyGold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h12l4 6-10 12L2 9Z"/><path d="M2 9h20"/></svg><b>هنوز محاسبه‌ای انجام نشده</b><span>وزن و قیمت را وارد کنید</span></div>
+    <div class="res" id="resGold" hidden><div class="stats" id="goldStats"></div>
+      <div class="ratio" id="goldRatioBox"><div class="ratio-title"><span>ترکیب مبلغ</span><span id="goldMeta"></span></div><div class="ratio-bar" id="goldBar"></div><div class="ratio-legend" id="goldLegend"></div></div>
+    </div></div></div></section>
+
+    <section class="panel" id="panel-market"><div class="panel-card"><div class="panel-head"><div class="panel-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M18.1 10.4A6 6 0 1 1 10.3 18"/><path d="M7 6h1v4"/></svg></div><div><h2>قیمت روز بازار</h2><p>قیمت‌های لحظه‌ای از <b>tgju.org</b> — روی هر کارت کلیک کنید</p></div><span class="chip-formula">live API</span></div>
+      <div class="panel-body single"><div class="results">
+        <div class="mkt-bar">
+          <button type="button" class="btn btn-secondary" id="refreshMkt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg>به‌روزرسانی</button>
+          <span class="mkt-updated" id="mktUpdated">در حال دریافت قیمت‌ها…</span>
+          <a class="mkt-src" href="https://www.tgju.org/" target="_blank" rel="noopener">tgju.org ↗</a>
+        </div>
+        <div class="mkt-status" id="mktStatus" hidden></div>
+        <h3 class="mkt-group-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v20"/><path d="M17 7c0-2.8-2.2-4-5-4s-5 1.5-5 4 2 3.6 5 4 5 1.6 5 4-2.2 4-5 4-5-1.2-5-4"/></svg>ارز</h3>
+        <div class="stats">
+          <a href="https://www.tgju.org/profile/price_dollar_rl" target="_blank" rel="noopener" class="stat flag-card">
+            <div class="stat-link-badge" title="مشاهده نمودار در tgju.org"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+            <div class="flag-img" style="background-image:url('https://flagcdn.com/w160/us.png')"></div>
+            <div class="flag-info"><div class="flag-name">دلار آمریکا</div><div class="flag-sub">نمودار و تاریخچه کامل</div></div>
+          </a>
+          <a href="https://www.tgju.org/profile/price_eur" target="_blank" rel="noopener" class="stat flag-card">
+            <div class="stat-link-badge" title="مشاهده نمودار در tgju.org"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+            <div class="flag-img" style="background-image:url('https://flagcdn.com/w160/eu.png')"></div>
+            <div class="flag-info"><div class="flag-name">یورو</div><div class="flag-sub">نمودار و تاریخچه کامل</div></div>
+          </a>
+          <div class="stat" style="--sa:#1E4F9A"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 8c-2-2-5-2-7 0s-2 5 0 7"/><path d="M7 12h6"/><path d="M10 8v10"/></svg></div><div style="flex:1"><div class="stat-label">پوند انگلیس <span class="mkt-change" id="chgGBP">—</span></div><div class="stat-sub">tgju.org</div><div class="stat-val"><span id="pxGBP">—</span><small data-cur>تومان</small></div></div></div>
+        </div>
+        <h3 class="mkt-group-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 3h12l4 6-10 12L2 9Z"/><path d="M2 9h20"/></svg>طلا</h3>
+        <div class="stats">
+          <a href="https://www.tgju.org/profile/ons" target="_blank" rel="noopener" class="stat" style="--sa:var(--gold)">
+            <div class="stat-link-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+            <div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12l4 6-10 12L2 9Z"/><path d="M2 9h20"/></svg></div>
+            <div style="flex:1"><div class="stat-label">اونس جهانی طلا <span class="mkt-change" id="chgGOLD">—</span></div><div class="stat-sub">tgju.org</div><div class="stat-val"><span id="pxGOLD">—</span><small>$ دلار</small></div></div>
+            <div class="stat-link-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>نمودار</div>
+          </a>
+          <a href="https://www.tgju.org/profile/geram18" target="_blank" rel="noopener" class="stat" style="--sa:var(--gold)">
+            <div class="stat-link-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+            <div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12l4 6-10 12L2 9Z"/><path d="M2 9h20"/></svg></div>
+            <div style="flex:1"><div class="stat-label">طلای ۱۸ عیار (هر گرم) <span class="mkt-change" id="chgG18">—</span></div><div class="stat-sub">tgju.org</div><div class="stat-val"><span id="pxG18">—</span><small data-cur>تومان</small></div></div>
+            <div class="stat-link-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>نمودار</div>
+          </a>
+        </div>
+        <h3 class="mkt-group-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>سکه</h3>
+        <div class="stats">
+          <a href="https://www.tgju.org/profile/sekee" target="_blank" rel="noopener" class="stat" style="--sa:var(--primary)">
+            <div class="stat-link-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+            <div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/></svg></div>
+            <div style="flex:1"><div class="stat-label">سکه امامی <span class="mkt-change" id="chgIMAMI">—</span></div><div class="stat-sub">طرح جدید</div><div class="stat-val"><span id="pxIMAMI">—</span><small data-cur>تومان</small></div></div>
+            <div class="stat-link-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>نمودار</div>
+          </a>
+          <a href="https://www.tgju.org/profile/nim" target="_blank" rel="noopener" class="stat" style="--sa:#B07E2C">
+            <div class="stat-link-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+            <div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 12h8"/></svg></div>
+            <div style="flex:1"><div class="stat-label">نیم سکه <span class="mkt-change" id="chgNIM">—</span></div><div class="stat-sub">بهار آزادی</div><div class="stat-val"><span id="pxNIM">—</span><small data-cur>تومان</small></div></div>
+            <div class="stat-link-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>نمودار</div>
+          </a>
+          <a href="https://www.tgju.org/profile/rob" target="_blank" rel="noopener" class="stat" style="--sa:var(--warning)">
+            <div class="stat-link-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+            <div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg></div>
+            <div style="flex:1"><div class="stat-label">ربع سکه <span class="mkt-change" id="chgROB">—</span></div><div class="stat-sub">بهار آزادی</div><div class="stat-val"><span id="pxROB">—</span><small data-cur>تومان</small></div></div>
+            <div class="stat-link-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>نمودار</div>
+          </a>
+        </div>
+      </div></div></div></section>
+  </main>
+  <div class="tile-band"></div>
+  <footer class="credit"><div class="made"><span class="heart">♥</span> ساخته‌شده توسط <span class="majik">MAJIK</span> <span class="heart">♥</span></div><small>سامانه محاسبات مالی هوشمند — <span id="faYear"></span> ©</small></footer>
+</div>
+<div class="toasts" id="toasts"></div>
+<div id="printArea"></div>
+<script>
+'use strict';
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+const reducedMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const nfInt=new Intl.NumberFormat('fa-IR',{maximumFractionDigits:0}),nf1=new Intl.NumberFormat('fa-IR',{maximumFractionDigits:1});
+const faMoney=n=>nfInt.format(Math.round(n)),pad=(n,l)=>String(n).padStart(l,'0');
+function toFaDigits(s){return String(s).replace(/[0-9]/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]).replace(/\./g,'٫')}
+function toEnDigits(s){return String(s||'').replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d))}
+function parseNum(v){if(v==null)return NaN;let s=toEnDigits(v).trim().replace(/٫/g,'.').replace(/[,،٬\s]/g,'');return s===''?NaN:Number(s)}
+function convertAmount(t){if(t==null)return 0;const v=Number(t);return isFinite(v)?(CUR==='rial'?v*10:v):0}
+function countUp(el,target,dec=0){if(!el)return;const fmt=dec===0?nfInt:nf1;target=Number(target);if(!isFinite(target)){el.textContent='—';el.dataset.pv='0';return}const from=parseFloat(el.dataset.pv||'0')||0;el.dataset.pv=target;if(reducedMotion||Math.abs(target-from)<.000001){el.textContent=fmt.format(target);return}const t0=performance.now(),dur=650,ease=x=>1-Math.pow(1-x,3);function step(t){const p=Math.min(1,(t-t0)/dur);el.textContent=fmt.format(from+(target-from)*ease(p));if(p<1)requestAnimationFrame(step)}requestAnimationFrame(step)}
+function applyGrouping(inp){const c=inp.selectionStart??inp.value.length,b=(toEnDigits(inp.value.slice(0,c)).match(/[0-9.]/g)||[]).length;let s=toEnDigits(inp.value).replace(/٫/g,'.').replace(/[^0-9.]/g,'');if(inp.dataset.num==='int')s=s.replace(/\./g,'');else{const i=s.indexOf('.');if(i>-1)s=s.slice(0,i+1)+s.slice(i+1).replace(/\./g,'')}s=s.slice(0,15);const d=s.indexOf('.'),ip=d>-1?s.slice(0,d):s,r=d>-1?s.slice(d):'';inp.value=toFaDigits(ip.replace(/\B(?=(\d{3})+(?!\d))/g,'٬')+r);let n=0,p=0;while(p<inp.value.length&&n<b){if(/[0-9۰-۹.٫]/.test(inp.value[p]))n++;p++}inp.setSelectionRange(p,p)}
+function toast(msg,type='err'){const ic={err:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4m0 4h.01"/></svg>',warn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4m0 4h.01"/></svg>',ok:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>'};const el=document.createElement('div');el.className='toast '+type;el.innerHTML=ic[type]+'<span>'+msg+'</span>';$('#toasts').appendChild(el);setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),320)},3400)}
+let CUR='toman';try{CUR=localStorage.getItem('majik-cur')||'toman'}catch(e){}
+const CUR_LABEL=()=>CUR==='rial'?'ریال':'تومان';
+function applyCurrency(){$$('[data-cur]').forEach(el=>el.textContent=CUR_LABEL());$$('.unit-opt').forEach(b=>b.classList.toggle('active',b.dataset.unit===CUR));renderAllResults();if(marketCache)renderMarket();try{localStorage.setItem('majik-cur',CUR)}catch(e){}}
+$$('.unit-opt').forEach(b=>{b.addEventListener('click',()=>{CUR=b.dataset.unit;applyCurrency()})});
+const jdiv=(a,b)=>~~(a/b),jmod=(a,b)=>a-~~(a/b)*b;
+function jalCal(jy){const br=[-61,9,38,199,426,686,756,818,1111,1181,1210,1635,2060,2097,2192,2262,2324,2394,2456,3178],bl=br.length,gy=jy+621;let lJ=-14,jp=br[0],jmp=0,jm,i;for(i=1;i<bl;i++){jm=br[i];jmp=jm-jp;if(jy<jm)break;lJ+=jdiv(jmp,33)*8+jdiv(jmod(jmp,33),4);jp=jm}let n=jy-jp;lJ+=jdiv(n,33)*8+jdiv(jmod(n,33)+3,4);if(jmod(jmp,33)===4&&jmp-n===4)lJ+=1;const lG=jdiv(gy,4)-jdiv((jdiv(gy,100)+1)*3,4)-150,m=20+lJ-lG;if(jmp-n<6)n=n-jmp+jdiv(jmp+4,33)*33;let lp=jmod(jmod(n+1,33)-1,4);if(lp===-1)lp=4;return{leap:lp,gy,march:m}}
+function g2d(gy,gm,gd){let d=jdiv((gy+jdiv(gm-8,6)+100100)*1461,4)+jdiv(153*jmod(gm+9,12)+2,5)+gd-34840408;d=d-jdiv(jdiv(gy+100100+jdiv(gm-8,6),100)*3,4)+752;return d}
+function d2g(jdn){let j=4*jdn+139361631;j=j+jdiv(jdiv(4*jdn+183187720,146097)*3,4)*4-3908;const i=jdiv(jmod(j,1461),4)*5+308,gd=jdiv(jmod(i,153),5)+1,gm=jmod(jdiv(i,153),12)+1,gy=jdiv(j,1461)-100100+jdiv(8-gm,6);return{gy,gm,gd}}
+function j2d(jy,jm,jd){const r=jalCal(jy);return g2d(r.gy,3,r.march)+(jm-1)*31-jdiv(jm,7)*(jm-7)+jd-1}
+function d2j(jdn){const gy=d2g(jdn).gy;let jy=gy-621;const r=jalCal(jy),jf=g2d(gy,3,r.march);let k=jdn-jf,jd,jm;if(k>=0){if(k<=185){jm=1+jdiv(k,31);jd=jmod(k,31)+1;return{jy,jm,jd}}k-=186}else{jy--;k+=179;if(r.leap===1)k++}jm=7+jdiv(k,30);jd=jmod(k,30)+1;return{jy,jm,jd}}
+const jal2g=(jy,jm,jd)=>d2g(j2d(jy,jm,jd)),g2jal=(gy,gm,gd)=>d2j(g2d(gy,gm,gd));
+const jalMonthLen=(jy,jm)=>jm<=6?31:jm<=11?30:(jalCal(jy).leap===0?30:29);
+function todayJal(){const n=new Date();return g2jal(n.getFullYear(),n.getMonth()+1,n.getDate())}
+function setTheme(t){document.documentElement.dataset.theme=t;try{localStorage.setItem('majik-theme',t)}catch(e){}}
+(function(){let t=null;try{t=localStorage.getItem('majik-theme')}catch(e){}setTheme(t==='dark'?'dark':'light')})();
+$('#themeBtn').addEventListener('click',()=>setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark'));
+function tickClock(){const n=new Date();$('#faDate').textContent=n.toLocaleDateString('fa-IR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});$('#faTime').textContent=n.toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'});$('#faYear').textContent=new Intl.DateTimeFormat('fa-IR',{year:'numeric'}).format(n)}
+setInterval(tickClock,1000);tickClock();
+$('#tickerTrack').innerHTML=['فرمول قسط مساوی: اصل × نرخ ÷ (۱ − (۱ + نرخ)⁻ⁿ)','اضافه‌کار معمولاً ۴۰٪ بیشتر از نرخ ساعت عادی محاسبه می‌شود','حاشیه سود واقعی = سود خالص پس از تخفیف و پورسانت ÷ بهای تمام‌شده','فرمول فروش طلا: وزن خالص × (قیمت ۱۸ عیار × ۷۴۰ ÷ ۷۵۰)','فرمول قسط مساوی: اصل × نرخ ÷ (۱ − (۱ + نرخ)⁻ⁿ)','اضافه‌کار معمولاً ۴۰٪ بیشتر از نرخ ساعت عادی محاسبه می‌شود','حاشیه سود واقعی = سود خالص پس از تخفیف و پورسانت ÷ بهای تمام‌شده','فرمول فروش طلا: وزن خالص × (قیمت ۱۸ عیار × ۷۴۰ ÷ ۷۵۰)'].map(t=>`<span>${t}</span>`).join('');
+let activeTool='loan';
+function activateTab(n){activeTool=n;$$('.tab').forEach(b=>{const o=b.dataset.tab===n;b.classList.toggle('active',o)});$$('.panel').forEach(p=>p.classList.toggle('active',p.id==='panel-'+n));closeJCal();if(n==='market'&&!marketCache)fetchMarket(false)}
+$$('.tab').forEach(b=>b.addEventListener('click',()=>activateTab(b.dataset.tab)));
+function setErr(id,msg){const f=$('#'+id).closest('.field');f.classList.add('invalid');f.querySelector('.err').textContent=msg}
+function clearErrs(form){form.querySelectorAll('.field.invalid').forEach(f=>f.classList.remove('invalid'))}
+const JM=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'],JW=['ش','ی','د','س','چ','پ','ج'];
+const jcalEl=$('#jcal');let jcalView=null,jcalOpen=false;
+function parseJalString(str){const m=toEnDigits(String(str||'').trim()).match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);if(!m)return null;const jy=+m[1],jm=+m[2],jd=+m[3];if(jy<1300||jy>1500||jm<1||jm>12||jd<1||jd>jalMonthLen(jy,jm))return null;return{jy,jm,jd}}
+function jalToInputStr(j){return toFaDigits(pad(j.jy,4)+'/'+pad(j.jm,2)+'/'+pad(j.jd,2))}
+function setTodayJal(){$('#loanDate').value=jalToInputStr(todayJal())}
+function openJCal(){const sel=parseJalString($('#loanDate').value)||todayJal();jcalView={jy:sel.jy,jm:sel.jm};renderJCal();jcalEl.hidden=false;jcalOpen=true}
+function closeJCal(){jcalEl.hidden=true;jcalOpen=false}
+function renderJCal(){const{jy,jm}=jcalView,sel=parseJalString($('#loanDate').value),today=todayJal();const mo=JM.map((m,i)=>`<option value="${i+1}" ${i+1===jm?'selected':''}>${m}</option>`).join('');let yo='';for(let y=jy-8;y<=jy+8;y++)yo+=`<option value="${y}" ${y===jy?'selected':''}>${nfInt.format(y)}</option>`;const g0=jal2g(jy,jm,1),off=(new Date(g0.gy,g0.gm-1,g0.gd).getDay()+1)%7,len=jalMonthLen(jy,jm);let cells=JW.map((w,i)=>`<div class="jcal-wd ${i===6?'fri':''}">${w}</div>`).join('');for(let i=0;i<off;i++)cells+='<div></div>';for(let d=1;d<=len;d++){const cls=['jcal-day'];if((off+d-1)%7===6)cls.push('fri');if(today.jy===jy&&today.jm===jm&&today.jd===d)cls.push('today');if(sel&&sel.jy===jy&&sel.jm===jm&&sel.jd===d)cls.push('selected');cells+=`<button type="button" class="${cls.join(' ')}" data-jd="${d}">${nfInt.format(d)}</button>`}jcalEl.innerHTML=`<div class="jcal-head"><button type="button" class="jcal-nav" data-nav="prev-m" aria-label="ماه قبل"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 18 6-6-6-6"/></svg></button><select data-sel="month" aria-label="ماه">${mo}</select><select data-sel="year" aria-label="سال">${yo}</select><button type="button" class="jcal-nav" data-nav="next-m" aria-label="ماه بعد"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="jcal-grid">${cells}</div><div class="jcal-foot"><button type="button" data-act="today">امروز</button><button type="button" data-act="clear">پاک کردن</button></div>`}
+function selectJal(jy,jm,jd){$('#loanDate').value=jalToInputStr({jy,jm,jd});closeJCal();calcLoan()}
+jcalEl.addEventListener('click',e=>{const nav=e.target.closest('[data-nav]');if(nav){if(nav.dataset.nav==='prev-m'){jcalView.jm--;if(jcalView.jm<1){jcalView.jm=12;jcalView.jy--}}else{jcalView.jm++;if(jcalView.jm>12){jcalView.jm=1;jcalView.jy++}}renderJCal();return}const day=e.target.closest('.jcal-day');if(day){selectJal(jcalView.jy,jcalView.jm,+day.dataset.jd);return}const act=e.target.closest('[data-act]');if(act){if(act.dataset.act==='today'){const t=todayJal();selectJal(t.jy,t.jm,t.jd)}else{$('#loanDate').value='';closeJCal();calcLoan()}}});
+jcalEl.addEventListener('change',e=>{if(e.target.dataset.sel==='month'){jcalView.jm=+e.target.value;renderJCal()}if(e.target.dataset.sel==='year'){jcalView.jy=+e.target.value;renderJCal()}});
+$('#loanDateBtn').addEventListener('click',e=>{e.stopPropagation();jcalOpen?closeJCal():openJCal()});
+$('#loanDate').addEventListener('focus',()=>{if(!jcalOpen)openJCal()});
+document.addEventListener('click',e=>{if(jcalOpen&&!e.target.closest('.date-control'))closeJCal()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&jcalOpen)closeJCal()});
+const lastResults={loan:null,salary:null,sales:null,gold:null};
+function addMonths(base,m){const d=new Date(base.getFullYear(),base.getMonth()+m,1);const last=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();d.setDate(Math.min(base.getDate(),last));return d}
+function calcLoan(){clearErrs($('#form-loan'));const rawA=$('#loanAmount').value,rawR=$('#loanRate').value,rawM=$('#loanMonths').value,rawD=$('#loanDate').value.trim();if(rawA===''&&rawR===''&&rawM===''&&rawD===''){$('#resLoan').hidden=true;$('#emptyLoan').hidden=false;lastResults.loan=null;return}const P=parseNum(rawA),annual=rawR===''?0:parseNum(rawR),n=parseNum(rawM);let ok=true;if(isNaN(P)||P<=0){setErr('loanAmount','مبلغ وام باید بزرگ‌تر از صفر باشد');ok=false}if(isNaN(annual)||annual<0||annual>100){setErr('loanRate','نرخ سود باید بین ۰ تا ۱۰۰ باشد');ok=false}if(isNaN(n)||n<1||n>600||!Number.isInteger(n)){setErr('loanMonths','تعداد اقساط باید بین ۱ تا ۶۰۰ باشد');ok=false}const jd=parseJalString(rawD);if(!jd){setErr('loanDate','تاریخ شمسی معتبر نیست');ok=false}if(!ok)return;const g=jal2g(jd.jy,jd.jm,jd.jd);const start=new Date(g.gy,g.gm-1,g.gd);const r=annual/100/12;const pmt=r===0?P/n:P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);let bal=P,totInt=0,totPay=0;const rows=[];for(let i=1;i<=n;i++){const interest=bal*r;const principal=(i===n)?bal:pmt-interest;const payment=principal+interest;bal-=principal;if(bal<.5)bal=0;totInt+=interest;totPay+=payment;rows.push({i,date:addMonths(start,i-1).toLocaleDateString('fa-IR'),pay:payment,int:interest,prin:principal,bal})}lastResults.loan={pmt,totInt,totPay,n,P,rows};renderLoan();$('#emptyLoan').hidden=true;$('#resLoan').hidden=false}
+function renderLoan(){const data=lastResults.loan;if(!data)return;countUp($('#loanPmt'),convertAmount(data.pmt));countUp($('#loanInt'),convertAmount(data.totInt));countUp($('#loanPay'),convertAmount(data.totPay));countUp($('#loanCnt'),data.n);const pPct=data.P/data.totPay*100;$('#barPrin').style.width=pPct+'%';$('#barInt').style.width=(100-pPct)+'%';$('#lblPrin').textContent=faMoney(convertAmount(data.P))+' '+CUR_LABEL();$('#lblInt').textContent=faMoney(convertAmount(data.totInt))+' '+CUR_LABEL();$('#loanRatioTxt').textContent='نسبت اصل '+nf1.format(pPct)+'٪';$('#loanBody').innerHTML=data.rows.map(x=>`<tr><td>${nfInt.format(x.i)}</td><td>${x.date}</td><td>${faMoney(convertAmount(x.pay))}</td><td>${faMoney(convertAmount(x.int))}</td><td>${faMoney(convertAmount(x.prin))}</td><td>${faMoney(convertAmount(x.bal))}</td></tr>`).join('');$('#footPay').textContent=faMoney(convertAmount(data.totPay));$('#footInt').textContent=faMoney(convertAmount(data.totInt));$('#footPrin').textContent=faMoney(convertAmount(data.P))}
+const SAL_FIELDS=['base','otHours','otRate','housing','bon','kids','bonus','ins','tax','misc'];
+function calcSalary(){clearErrs($('#form-salary'));if(SAL_FIELDS.every(id=>$('#'+id).value==='')){$('#resSalary').hidden=true;$('#emptySalary').hidden=false;lastResults.salary=null;return}const v={};SAL_FIELDS.forEach(id=>v[id]=parseNum($('#'+id).value)||0);const overtime=v.otHours*v.otRate;const benefits=overtime+v.housing+v.bon+v.kids+v.bonus;const gross=v.base+benefits;const deductions=v.ins+v.tax+v.misc;const net=gross-deductions;lastResults.salary={benefits,deductions,gross,net,base:v.base,overtime};renderSalary();$('#emptySalary').hidden=true;$('#resSalary').hidden=false}
+function renderSalary(){const data=lastResults.salary;if(!data)return;countUp($('#salBen'),convertAmount(data.benefits));countUp($('#salDed'),convertAmount(data.deductions));countUp($('#salGross'),convertAmount(data.gross));countUp($('#salNet'),convertAmount(data.net));$('#salNet').closest('.stat-val').classList.toggle('neg',data.net<0);const parts=[['حقوق پایه',data.base,'c1'],['اضافه‌کار',data.overtime,'c2'],['مزایا',data.benefits-data.overtime,'c3']];let bar='',legend='';parts.forEach(([lbl,val,cls])=>{if(data.gross>0&&val>0){bar+=`<i class="${cls}" style="width:${val/data.gross*100}%"></i>`;legend+=`<span><i class="${cls}"></i>${lbl}: <b>${faMoney(convertAmount(val))}</b></span>`}});$('#salBar').innerHTML=bar;$('#salLegend').innerHTML=legend}
+function calcSales(){clearErrs($('#form-sales'));const buy=parseNum($('#buy').value)||0,sell=parseNum($('#sell').value)||0,qty=parseNum($('#qty').value)||0,disc=parseNum($('#disc').value)||0,comm=parseNum($('#comm').value)||0;if(buy===0&&sell===0&&qty===0){$('#resSales').hidden=true;$('#emptySales').hidden=false;lastResults.sales=null;return}let ok=true;if(disc>100){setErr('disc','تخفیف نمی‌تواند بیش از ۱۰۰٪ باشد');ok=false}if(comm>100){setErr('comm','پورسانت نمی‌تواند بیش از ۱۰٪ باشد');ok=false}if(!ok)return;const grossSale=sell*qty;const discAmt=grossSale*disc/100;const netSale=grossSale-discAmt;const cost=buy*qty;const unitProfit=sell*(1-disc/100)-buy;const totProfit=netSale-cost;const commAmt=netSale*comm/100;const netProfit=totProfit-commAmt;const margin=cost>0?netProfit/cost*100:0;lastResults.sales={grossSale,discAmt,unitProfit,totProfit,commAmt,margin,netProfit};renderSales();$('#emptySales').hidden=true;$('#resSales').hidden=false}
+function renderSales(){const data=lastResults.sales;if(!data)return;countUp($('#sGross'),convertAmount(data.grossSale));countUp($('#sDisc'),convertAmount(data.discAmt));countUp($('#sUnit'),convertAmount(data.unitProfit));countUp($('#sProfit'),convertAmount(data.totProfit));countUp($('#sComm'),convertAmount(data.commAmt));countUp($('#sMargin'),data.margin,1);countUp($('#sNet'),convertAmount(data.netProfit));$('#sUnit').closest('.stat-val').classList.toggle('neg',data.unitProfit<0);$('#sProfit').closest('.stat-val').classList.toggle('neg',data.totProfit<0);$('#sNet').closest('.stat-val').classList.toggle('neg',data.netProfit<0);$('#sMargin').closest('.stat-val').classList.toggle('neg',data.margin<0)}
+function renderAllResults(){if(lastResults.loan)renderLoan();if(lastResults.salary)renderSalary();if(lastResults.sales)renderSales();if(lastResults.gold)renderGold()}
+
+/* ═══ ماشین حساب طلا ═══ */
+let goldMode='buy',goldPriceTouched=false;
+const SELL_FACTOR=740/750;
+function goldNet(){const w=parseNum($('#goldWeight').value)||0;const s=parseNum($('#goldStone').value)||0;return Math.max(w-s,0)}
+function karatLivePrice(){const g=marketCache&&marketCache.G18;if(!g||!g.price)return null;return Math.round(Number(g.price)*Number($('#goldKarat').value)/18)}
+function applyKarat(){
+  const k=Number($('#goldKarat').value);
+  const lbl=$('#goldPriceLabel');if(lbl)lbl.textContent='قیمت یک گرم طلای '+toFaDigits(k)+' عیار';
+  const live=karatLivePrice();
+  const hint=$('#goldLiveHint');
+  if(hint)hint.textContent=live?('قیمت روز طلای '+toFaDigits(k)+' عیار: '+nfInt.format(live)+' تومان'):'قیمت روز در دسترس نیست — دستی وارد کنید';
+  if(!goldPriceTouched&&live){$('#goldPrice').value=String(live);applyGrouping($('#goldPrice'))}
+  calcGold();
+}
+function calcGold(){
+  clearErrs($('#form-gold'));
+  if($('#goldWeight').value===''&&$('#goldPrice').value===''){$('#resGold').hidden=true;$('#emptyGold').hidden=false;lastResults.gold=null;return}
+  const net=goldNet(),price=parseNum($('#goldPrice').value);
+  let ok=true;
+  if(net<=0){setErr('goldWeight','وزن خالص باید بزرگ‌تر از صفر باشد');ok=false}
+  if(isNaN(price)||price<=0){setErr('goldPrice','قیمت هر گرم طلا را وارد کنید');ok=false}
+  const oj=parseNum($('#goldOjrat').value)||0,so=parseNum($('#goldSood').value)||0,tx=parseNum($('#goldTax').value)||0,dc=parseNum($('#goldDisc').value)||0,ks=parseNum($('#goldKasr').value)||0;
+  if(goldMode==='buy')[['goldOjrat',oj],['goldSood',so],['goldTax',tx],['goldDisc',dc]].forEach(([id,v])=>{if(v<0||v>100){setErr(id,'درصد باید بین ۰ تا ۱۰۰ باشد');ok=false}});
+  if(!ok)return;
+  let d;
+  if(goldMode==='buy'){
+    const base=net*price;
+    const ojrat=base*oj/100;
+    const sood=(base+ojrat)*so/100;
+    const tax=(ojrat+sood)*tx/100;
+    const sub=base+ojrat+sood+tax;
+    const disc=sub*dc/100;
+    const total=sub-disc;
+    d={mode:'buy',net,price,base,ojrat,sood,tax,disc,total,perGram:total/net,sellNow:base*SELL_FACTOR,breakeven:total/(net*SELL_FACTOR)};
+  }else if(goldMode==='sell'){
+    const full=net*price;
+    const recv=full*SELL_FACTOR;
+    d={mode:'sell',net,price,full,kasrAmt:full-recv,recv,perGram:recv/net};
+  }else{
+    const target=parseNum($('#goldTarget').value)||0;
+    const buyG=parseNum($('#goldBuyPrice').value)||0;
+    if(target<=0){setErr('goldTarget','مبلغ هدف را وارد کنید');return}
+    const paid=buyG>0?net*buyG:0;
+    d={mode:'target',net,price,target,needP:target/(net*SELL_FACTOR),beP:buyG>0?buyG/SELL_FACTOR:0,recvNow:net*price*SELL_FACTOR,paid,profit:buyG>0?(net*price*SELL_FACTOR)-paid:null};
+  }
+    d.karat=Number($('#goldKarat').value)||18;
+  lastResults.gold=d;renderGold();
+  $('#emptyGold').hidden=true;$('#resGold').hidden=false;
+}
+function renderGold(){
+  const d=lastResults.gold;if(!d)return;
+  const ic={gold:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12l4 6-10 12L2 9Z"/><path d="M2 9h20"/></svg>',fee:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>',trend:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg>',tax:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/></svg>',off:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="9" r="2"/><circle cx="15" cy="15" r="2"/><path d="M7.5 7.5c-2 1-3 3-3 5a5 5 0 0 0 9 3"/></svg>',pay:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>',scale:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18"/><path d="M8 21h8"/><path d="m5 7 7-4 7 4"/><path d="M5 7l-3 7a3.5 3.5 0 0 0 6 0Z"/><path d="m19 7-3 7a3.5 3.5 0 0 0 6 0Z"/></svg>',coin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/></svg>',target:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>'};
+  const cards=[];
+  if(d.mode==='buy'){
+    cards.push({l:'قیمت طلای محصول',v:d.base,co:'var(--gold)',ic:ic.gold,sub:'وزن خالص × قیمت × عیار'});
+    cards.push({l:'اجرت ساخت',v:d.ojrat,co:'#B07E2C',ic:ic.fee});
+    cards.push({l:'سود فروشنده',v:d.sood,co:'var(--blue)',ic:ic.trend});
+    cards.push({l:'مالیات',v:d.tax,co:'var(--lacquer)',ic:ic.tax});
+    if(d.disc>0)cards.push({l:'تخفیف',v:d.disc,co:'var(--success)',ic:ic.off});
+    cards.push({l:'مبلغ نهایی خرید',v:d.total,co:'var(--primary)',ic:ic.pay,hl:true});
+    cards.push({l:'قیمت تمام‌شده هر گرم',v:d.perGram,co:'var(--teal)',ic:ic.scale});
+    cards.push({l:'ارزش فروش فوری (دست‌دوم)',v:d.sellNow,co:'#B07E2C',ic:ic.coin,sub:'با فرمول ۷۴۰/۷۵۰'});
+    cards.push({l:'قیمت سر به سر هر گرم',v:d.breakeven,co:'var(--rose)',ic:ic.target,sub:'برای جبران همه هزینه‌ها'});
+  }else if(d.mode==='sell'){
+    cards.push({l:'ارزش طلای خالص با نرخ روز',v:d.full,co:'var(--gold)',ic:ic.gold});
+    cards.push({l:'کسر خرید فروشنده',v:d.kasrAmt,co:'var(--error)',ic:ic.fee,sub:'معادل ۱٫۳۳٪ (۷۴۰/۷۵۰)'});
+    cards.push({l:'مبلغ دریافتی',v:d.recv,co:'var(--primary)',ic:ic.pay,hl:true});
+    cards.push({l:'قیمت دریافتی هر گرم',v:d.perGram,co:'var(--teal)',ic:ic.scale});
+  }else{
+    cards.push({l:'مبلغ هدف',v:d.target,co:'var(--blue)',ic:ic.target});
+     cards.push({l:'طلا به چه قیمتی برسد؟',v:d.needP,co:'var(--primary)',ic:ic.trend,hl:true,sub:'قیمت هر گرم طلای '+toFaDigits(d.karat||18)+' عیار'});
+    if(d.beP>0)cards.push({l:'قیمت سر به سر طلا',v:d.beP,co:'var(--rose)',ic:ic.scale,sub:'بر اساس قیمت خرید شما'});
+    cards.push({l:'دریافتی اگر الان بفروشی',v:d.recvNow,co:'var(--teal)',ic:ic.coin});
+    if(d.profit!==null)cards.push({l:d.profit>=0?'سود فروش الان':'ضرر فروش الان',v:d.profit,co:d.profit>=0?'var(--success)':'var(--error)',ic:ic.pay});
+  }
+  $('#goldMeta').textContent='وزن خالص: '+nf1.format(d.net)+' گرم';
+  $('#goldStats').innerHTML=cards.map((c,i)=>'<div class="stat'+(c.hl?' hl':'')+'" style="--sa:'+c.co+'"><div class="stat-ic">'+c.ic+'</div><div><div class="stat-label">'+c.l+(c.hl?' <span class="heart-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.7-9.5-9C1 8.5 3 5 6.5 5c2 0 3.5 1 4.5 2.5C12 6 13.5 5 15.5 5 19 5 21 8.5 20.5 12c-1 4.3-8.5 9-8.5 9Z"/></svg></span>':'')+'</div>'+(c.sub?'<div class="stat-sub">'+c.sub+'</div>':'')+'<div class="stat-val"><span id="gv'+i+'">۰</span><small>'+CUR_LABEL()+'</small></div></div></div>').join('');
+  cards.forEach((c,i)=>countUp($('#gv'+i),convertAmount(c.v)));
+  const box=$('#goldRatioBox');let bar='',legend='';
+  if(d.mode==='buy'){box.style.display='';[['اصل',d.base,'c1'],['اجرت',d.ojrat,'c2'],['سود',d.sood,'c3'],['مالیات',d.tax,'c4']].forEach(([l,v,cls])=>{if(d.total>0&&v>0){bar+='<i class="'+cls+'" style="width:'+(v/d.total*100)+'%"></i>';legend+='<span><i class="'+cls+'"></i>'+l+': <b>'+faMoney(convertAmount(v))+'</b></span>'}})}
+  else if(d.mode==='sell'){box.style.display='';[['دریافتی',d.recv,'c1'],['کسر',d.kasrAmt,'c2']].forEach(([l,v,cls])=>{if(d.full>0&&v>0){bar+='<i class="'+cls+'" style="width:'+(v/d.full*100)+'%"></i>';legend+='<span><i class="'+cls+'"></i>'+l+': <b>'+faMoney(convertAmount(v))+'</b></span>'}})}
+  else{box.style.display='none'}
+  $('#goldBar').innerHTML=bar;$('#goldLegend').innerHTML=legend;
+}
+function setGoldLive(){const live=karatLivePrice();if(!live){toast('قیمت روز هنوز در دسترس نیست','warn');return false}$('#goldPrice').value=String(live);applyGrouping($('#goldPrice'));goldPriceTouched=false;applyKarat();return true}
+function autoFillGoldPrice(tries){if(karatLivePrice()){applyKarat();return}if(tries>0)setTimeout(()=>autoFillGoldPrice(tries-1),1200)}
+$$('.mode-opt').forEach(b=>b.addEventListener('click',()=>{goldMode=b.dataset.mode;$('#form-gold').dataset.mode=goldMode;$$('.mode-opt').forEach(x=>x.classList.toggle('active',x===b));calcGold()}));
+$('#form-gold').querySelectorAll('input').forEach(i=>i.addEventListener('input',calcGold));
+$('#goldKarat').addEventListener('change',applyKarat);
+$('#goldLiveBtn').addEventListener('click',e=>{e.preventDefault();if(setGoldLive())toast('قیمت روز طلا اعمال شد','ok')});
+$('#goldPrice').addEventListener('input',()=>{goldPriceTouched=true});
+
+/* ═══ قیمت روز بازار — tgju.org ═══ */
+const TGJU_KEYS='137138,137137,137139,137140,137141,137119,137123,137120,137121,137122,137225,137207,137221,137222,137218';
+let marketCache=null;
+function detectCard(title){const t=(title||'').replace(/ي/g,'ی').replace(/ك/g,'ک');if(/ربع/.test(t))return 'ROB';if(/نیم/.test(t))return 'NIM';if(/امامی|تمام\s*بهار|طرح\s*جدید/.test(t))return 'IMAMI';if(/انس|اونس/.test(t))return 'GOLD';if(/۱۸|18/.test(t))return 'G18';if(/پوند/.test(t))return 'GBP';if(/یورو/.test(t))return 'EUR';if(/دلار/.test(t)&&!/کانادا|استرالیا|نیوزیلند|سنگاپور|هنگ/.test(t))return 'USD';return null}
+function normalizeItem(item,key){if(!item||!item.p)return null;const p=Number(item.p);if(!isFinite(p)||p<=0)return null;if(key==='GOLD'){return{price:Math.round(p*100)/100,high:item.h?Math.round(Number(item.h)*100)/100:Math.round(p*1.01*100)/100,low:item.l?Math.round(Number(item.l)*100)/100:Math.round(p*0.99*100)/100,change:Number(item.dp||0),source:'tgju.org',time:item.t}}return{price:Math.round(p/10),high:item.h?Math.round(Number(item.h)/10):Math.round(p*1.005/10),low:item.l?Math.round(Number(item.l)/10):Math.round(p*0.995/10),change:Number(item.dp||0),source:'tgju.org',time:item.t}}
+async function fetchMarket(manual){
+  const btn=$('#refreshMkt'),status=$('#mktStatus');
+  btn.classList.add('spin');$('#mktUpdated').textContent='در حال دریافت قیمت‌ها…';status.hidden=true;
+  try{
+    const r=await fetch('https://api.tgju.org/v1/widget/tmp?keys='+TGJU_KEYS+'&_='+Date.now(),{cache:'no-store'});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const data=await r.json();
+    const indicators=(data&&data.response&&data.response.indicators)||[];
+    if(!indicators.length)throw new Error('داده‌ای دریافت نشد');
+    const result={};
+    indicators.forEach(item=>{const key=detectCard(item.title);if(!key||result[key])return;const norm=normalizeItem(item,key);if(norm)result[key]=norm});
+    btn.classList.remove('spin');
+    if(!Object.keys(result).length)throw new Error('هیچ قیمت معتبری پیدا نشد');
+    marketCache=result;renderMarket();
+    try{localStorage.setItem('majik-market-cache',JSON.stringify({data:result,time:Date.now()}))}catch(e){}
+    const nowStr=new Date().toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'});
+    const sample=Object.values(result)[0];
+    let txt='به‌روزرسانی: '+nowStr+' • '+Object.keys(result).length+' قیمت • tgju.org';
+    if(sample&&sample.time)txt+=' • داده: '+sample.time;
+    $('#mktUpdated').textContent=txt;
+    status.className='mkt-status ok';
+    status.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg><span>✅ قیمت‌های لحظه‌ای از <b>tgju.org</b></span>';
+    status.hidden=false;
+    if(manual)toast('قیمت‌های بازار به‌روزرسانی شد','ok');
+  }catch(e){
+    btn.classList.remove('spin');
+    try{
+      const cached=JSON.parse(localStorage.getItem('majik-market-cache')||'null');
+      if(cached&&cached.data&&Object.keys(cached.data).length){
+        marketCache=cached.data;renderMarket();
+        status.className='mkt-status warn';
+        status.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4m0 4h.01"/></svg><span>⚠️ اتصال برقرار نشد؛ نمایش آخرین قیمت‌های ذخیره‌شده ('+Math.round((Date.now()-cached.time)/60000)+' دقیقه پیش)</span>';
+        status.hidden=false;$('#mktUpdated').textContent='کش محلی';
+        if(manual)toast('خطا در دریافت؛ استفاده از کش','warn');
+        return;
+      }
+    }catch(e2){}
+    status.className='mkt-status err';
+    status.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4m0 4h.01"/></svg><span>خطا: '+e.message+'</span>';
+    status.hidden=false;$('#mktUpdated').textContent='خطا در دریافت';
+    if(manual)toast('دریافت قیمت‌ها ناموفق بود','err');
+  }
+}
+function renderMarket(){if(!marketCache)return;const f=v=>CUR==='rial'?v*10:v;['GBP','GOLD','G18','IMAMI','NIM','ROB'].forEach(k=>{const it=marketCache[k];const px=$('#px'+k);const ch=$('#chg'+k);if(!px)return;if(!it||!it.price){px.textContent='—';if(ch){ch.textContent='—';ch.className='mkt-change'}return}countUp(px,f(it.price));if(ch){const c=Number(it.change||0);ch.textContent=(c>0?'+':'')+nf1.format(c)+'٪';ch.className='mkt-change '+(c>0?'up':c<0?'down':'')}})}
+const marketRefreshBtn=$('#refreshMkt');if(marketRefreshBtn){marketRefreshBtn.onclick=()=>fetchMarket(true)}
+if(window.__majikMarketTimer){clearInterval(window.__majikMarketTimer)}
+window.__majikMarketTimer=setInterval(()=>{if(activeTool==='market')fetchMarket(false)},30000);
+(function(){try{const cached=JSON.parse(localStorage.getItem('majik-market-cache')||'null');if(cached&&cached.data){marketCache=cached.data;renderMarket()}}catch(e){}})();
+
+const TOOL_META={loan:'ماشین حساب وام',salary:'ماشین حساب حقوق',sales:'سود فروش',gold:'ماشین حساب طلا'};
+function clearTool(name){$('#form-'+name).reset();clearErrs($('#form-'+name));lastResults[name]=null;const map={loan:['emptyLoan','resLoan'],salary:['emptySalary','resSalary'],sales:['emptySales','resSales'],gold:['emptyGold','resGold']};$('#'+map[name][0]).hidden=false;$('#'+map[name][1]).hidden=true;toast('فرم «'+TOOL_META[name]+'» پاک شد','ok')}
+function buildReport(mode){const data=lastResults[activeTool];if(!data){toast('ابتدا مقادیر معتبر وارد کنید','warn');return false}const now=new Date();const date=now.toLocaleDateString('fa-IR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});const time=now.toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'});const U=CUR_LABEL();let stats=[],table='';if(activeTool==='loan'){stats=[['مبلغ هر قسط',faMoney(convertAmount(data.pmt))+' '+U],['مجموع سود',faMoney(convertAmount(data.totInt))+' '+U],['مجموع بازپرداخت',faMoney(convertAmount(data.totPay))+' '+U],['تعداد',nfInt.format(data.n)+' قسط']];table='<div class="rp-sub">جدول اقساط</div><table><thead><tr><th>قسط</th><th>تاریخ</th><th>مبلغ</th><th>سود</th><th>اصل</th><th>مانده</th></tr></thead><tbody>'+data.rows.map(x=>`<tr><td>${nfInt.format(x.i)}</td><td>${x.date}</td><td>${faMoney(convertAmount(x.pay))}</td><td>${faMoney(convertAmount(x.int))}</td><td>${faMoney(convertAmount(x.prin))}</td><td>${faMoney(convertAmount(x.bal))}</td></tr>`).join('')+'</tbody></table>'}else if(activeTool==='salary'){stats=[['پایه',faMoney(convertAmount(data.base))+' '+U],['مزایا',faMoney(convertAmount(data.benefits))+' '+U],['کسورات',faMoney(convertAmount(data.deductions))+' '+U],['ناخالص',faMoney(convertAmount(data.gross))+' '+U],['خالص',faMoney(convertAmount(data.net))+' '+U]]}else if(activeTool==='gold'){if(data.mode==='buy'){stats=[['وزن خالص',nf1.format(data.net)+' گرم'],['اصل طلا',faMoney(convertAmount(data.base))+' '+U],['اجرت',faMoney(convertAmount(data.ojrat))+' '+U],['سود',faMoney(convertAmount(data.sood))+' '+U],['مالیات',faMoney(convertAmount(data.tax))+' '+U],['مبلغ نهایی',faMoney(convertAmount(data.total))+' '+U],['هر گرم',faMoney(convertAmount(data.perGram))+' '+U]]}else if(data.mode==='sell'){stats=[['وزن خالص',nf1.format(data.net)+' گرم'],['ارزش روز',faMoney(convertAmount(data.full))+' '+U],['کسر',faMoney(convertAmount(data.kasrAmt))+' '+U],['دریافتی',faMoney(convertAmount(data.recv))+' '+U],['هر گرم',faMoney(convertAmount(data.perGram))+' '+U]]}else{stats=[['وزن خالص',nf1.format(data.net)+' گرم'],['مبلغ هدف',faMoney(convertAmount(data.target))+' '+U],['قیمت لازم طلا',faMoney(convertAmount(data.needP))+' '+U],['سر به سر',data.beP?faMoney(convertAmount(data.beP))+' '+U:'—'],['دریافتی الان',faMoney(convertAmount(data.recvNow))+' '+U]]}}else{stats=[['فروش',faMoney(convertAmount(data.grossSale))+' '+U],['تخفیف',faMoney(convertAmount(data.discAmt))+' '+U],['سود کالا',faMoney(convertAmount(data.unitProfit))+' '+U],['سود کل',faMoney(convertAmount(data.totProfit))+' '+U],['پورسانت',faMoney(convertAmount(data.commAmt))+' '+U],['حاشیه',nf1.format(data.margin)+'٪'],['سود خالص',faMoney(convertAmount(data.netProfit))+' '+U]]}$('#printArea').innerHTML=`<div class="rp"><div class="rp-head"><div><div class="rp-brand">محاسبه هوشمند</div><div class="rp-title">${TOOL_META[activeTool]}</div></div><div class="rp-meta"><div>${mode==='pdf'?'PDF':'چاپ'}</div><div>${date}</div><div>${time}</div></div></div><div class="rp-stats">${stats.map(([l,v])=>`<div class="rp-stat"><span>${l}</span><b>${v}</b></div>`).join('')}</div>${table}<div class="rp-foot">ساخته‌شده توسط <b>MAJIK</b></div></div>`;return true}
+$$('[data-action]').forEach(btn=>{btn.addEventListener('click',()=>{const action=btn.dataset.action;if(action==='clear')clearTool(btn.dataset.tool);if(action==='print'&&buildReport('print'))window.print();if(action==='pdf'&&buildReport('pdf')){toast('در پنجره چاپ، Save as PDF را انتخاب کنید','warn');setTimeout(()=>window.print(),420)}})});
+$$('form').forEach(f=>{f.addEventListener('submit',e=>e.preventDefault())});
+$('#form-loan').querySelectorAll('input').forEach(i=>i.addEventListener('input',calcLoan));
+$('#form-salary').querySelectorAll('input').forEach(i=>i.addEventListener('input',calcSalary));
+$('#form-sales').querySelectorAll('input').forEach(i=>i.addEventListener('input',calcSales));
+$$('input[data-num]').forEach(inp=>{inp.addEventListener('input',()=>applyGrouping(inp))});
+$('#goldWeight').value='5';$('#goldStone').value='0';$('#goldOjrat').value='18';$('#goldSood').value='7';$('#goldTax').value='10';$('#goldDisc').value='0';$('#goldKasr').value='1';
+</script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js')})}</script>
+</body>
+</html>
