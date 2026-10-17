@@ -1,18 +1,12 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl" data-theme="light">
 <head>
-  <link rel="manifest" href="manifest.webmanifest?v=3">
-<meta name="theme-color" content="#CC3333">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 <title>محاسبه هوشمند — سامانه محاسبات مالی</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@700;800&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
-<!-- v3.1 -->
 <style>
 :root{--primary:#CC3333;--primary-hover:#A61B29;--teal:#00A693;--blue:#1E4F9A;--ochre:#C99A45;--rose:#FE28A2;--lacquer:#860111;--neutral:#8A7A6E;--bg:#FFFDF8;--surface:#FAF5EA;--text:#2B2320;--text2:#8A7A6E;--border:#E7DCC8;--success:#007A6C;--warning:#B07E2C;--error:#860111;--gold:#C99A45;--shadow-1:0 1px 2px rgba(134,1,17,.06),0 4px 14px rgba(201,154,69,.10);--shadow-2:0 2px 4px rgba(134,1,17,.10),0 10px 28px rgba(30,79,154,.14);--font:'Vazirmatn','DM Sans',Tahoma,sans-serif;--font-display:'Vazirmatn','Nunito Sans',Tahoma,sans-serif;--font-mono:'JetBrains Mono','Vazirmatn',monospace}
 [data-theme="dark"]{--bg:#191010;--surface:#221913;--text:#F3E9DB;--text2:#C0AC9A;--neutral:#C0AC9A;--border:#43302A}
@@ -93,7 +87,7 @@ body{font-family:var(--font);color:var(--text);font-size:14px;line-height:1.6;mi
 .date-control{position:relative}
 .date-control input{padding-inline-end:56px;text-align:center}
 .date-btn{position:absolute;inset-inline-end:7px;top:7px;width:34px;height:34px;border-radius:9999px;border:0;background:var(--surface);color:var(--text2);display:grid;place-items:center;cursor:pointer}
-.jcal{position:fixed;top:auto;left:auto;z-index:9999;width:310px;background:var(--bg);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-2);padding:16px;max-width:calc(100vw - 32px)}
+.jcal{position:absolute;top:calc(100% + 10px);inset-inline-start:0;z-index:60;width:310px;background:var(--bg);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-2);padding:16px}
 .jcal-head{display:flex;align-items:center;gap:8px;margin-bottom:12px}
 .jcal-head select{flex:1;height:36px;font-family:var(--font);font-size:13px;font-weight:600;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:0 8px;color:var(--text)}
 .jcal-nav{width:36px;height:36px;border-radius:9999px;border:1px solid var(--border);background:var(--bg);color:var(--text);display:grid;place-items:center;cursor:pointer}
@@ -357,7 +351,6 @@ html,body{overflow-x:clip}
       <div class="unit-switch" role="group"><button type="button" class="unit-opt active" data-unit="toman">تومان</button><button type="button" class="unit-opt" data-unit="rial">ریال</button></div>
       <div class="chip date-chip"><span id="faDate"></span><b id="faTime"></b></div>
       <button class="icon-btn" id="themeBtn" aria-label="تغییر حالت"><svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/></svg><svg class="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button>
-      <button class="icon-btn" id="clearCacheBtn" aria-label="پاک کردن کش و رفرش"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M21 12a9 9 0 1 1-9 9 9.75 9.75 0 0 1 6.74-2.74L21 16"/></svg></button>
     </div>
   </header>
   <div class="tile-band"></div>
@@ -445,8 +438,8 @@ html,body{overflow-x:clip}
       <div class="field"><label>کسر هنگام فروش</label><div class="control"><input type="text" inputmode="decimal" id="goldKasr" data-num="dec"><span class="unit">٪</span></div><p class="err"></p></div>
     </div>
     <p class="form-note only-buy">مالیات بر ارزش افزوده ۱۰٪ فقط به اجرت ساخت و سود فروشنده تعلق می‌گیرد</p>
-    <p class="form-note only-sell">فرمول فروش دست‌دوم: وزن خالص × (قیمت گرم ۱۸ عیار × ۷۴  ۷۵۰)</p>
-    <p class="form-note only-target">قیمت لازم طلا = مبلغ هدف ÷ (وزن خالص × ۷۴  ۷۵۰)</p>
+    <p class="form-note only-sell">فرمول فروش دست‌دوم: وزن خالص × (قیمت گرم ۱۸ عیار × ۷۴۰ ÷ ۷۵۰)</p>
+    <p class="form-note only-target">قیمت لازم طلا = مبلغ هدف ÷ (وزن خالص × ۷۴۰ ÷ ۷۵۰)</p>
     <div class="actions"><button type="button" class="btn btn-destructive" data-action="clear" data-tool="gold">پاک‌کردن</button><button type="button" class="btn btn-secondary" data-action="print">چاپ</button><button type="button" class="btn btn-primary" data-action="pdf">ذخیره PDF</button></div></form>
   <div class="results"><div class="empty" id="emptyGold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3h12l4 6-10 12L2 9Z"/><path d="M2 9h20"/></svg><b>هنوز محاسبه‌ای انجام نشده</b><span>وزن و قیمت را وارد کنید</span></div>
     <div class="res" id="resGold" hidden><div class="stats" id="goldStats"></div>
@@ -463,17 +456,10 @@ html,body{overflow-x:clip}
         <div class="mkt-status" id="mktStatus" hidden></div>
         <h3 class="mkt-group-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v20"/><path d="M17 7c0-2.8-2.2-4-5-4s-5 1.5-5 4 2 3.6 5 4 5 1.6 5 4-2.2 4-5 4-5-1.2-5-4"/></svg>ارز</h3>
         <div class="stats">
-          <a href="https://www.tgju.org/profile/price_dollar_rl" target="_blank" rel="noopener" class="stat flag-card">
-            <div class="stat-link-badge" title="مشاهده نمودار در tgju.org"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
-            <div class="flag-img" style="background-image:url('https://flagcdn.com/w160/us.png')"></div>
-            <div class="flag-info"><div class="flag-name">دلار آمریکا</div><div class="flag-sub">نمودار و تاریخچه کامل</div></div>
-          </a>
-          <a href="https://www.tgju.org/profile/price_eur" target="_blank" rel="noopener" class="stat flag-card">
-            <div class="stat-link-badge" title="مشاهده نمودار در tgju.org"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
-            <div class="flag-img" style="background-image:url('https://flagcdn.com/w160/eu.png')"></div>
-            <div class="flag-info"><div class="flag-name">یورو</div><div class="flag-sub">نمودار و تاریخچه کامل</div></div>
-          </a>
-          <div class="stat" style="--sa:#1E4F9A"><div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 8c-2-2-5-2-7 0s-2 5 0 7"/><path d="M7 12h6"/><path d="M10 8v10"/></svg></div><div style="flex:1"><div class="stat-label">پوند انگلیس <span class="mkt-change" id="chgGBP">—</span></div><div class="stat-sub">tgju.org</div><div class="stat-val"><span id="pxGBP">—</span><small data-cur>تومان</small></div></div></div>
+          <a href="https://www.tgju.org/profile/price_dollar_rl" target="_blank" rel="noopener" class="stat flag-card"><div class="stat-link-badge" title="مشاهده نمودار در tgju.org"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div><div class="flag-img" style="background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 74 48%22%3E%3Crect width=%2274%22 height=%2248%22 fill=%22%23fff%22/%3E%3Crect y=%220.00%22 width=%2274%22 height=%223.69%22 fill=%22%23b22234%22/%3E%3Crect y=%227.38%22 width=%2274%22 height=%223.69%22 fill=%22%23b22234%22/%3E%3Crect y=%2214.76%22 width=%2274%22 height=%223.69%22 fill=%22%23b22234%22/%3E%3Crect y=%2222.14%22 width=%2274%22 height=%223.69%22 fill=%22%23b22234%22/%3E%3Crect y=%2229.52%22 width=%2274%22 height=%223.69%22 fill=%22%23b22234%22/%3E%3Crect y=%2236.90%22 width=%2274%22 height=%223.69%22 fill=%22%23b22234%22/%3E%3Crect y=%2244.28%22 width=%2274%22 height=%223.69%22 fill=%22%23b22234%22/%3E%3Crect width=%2232%22 height=%2225.8%22 fill=%22%233c3b6e%22/%3E%3Cg fill=%22%23fff%22%3E%3Ccircle cx=%224%22 cy=%224%22 r=%221.4%22/%3E%3Ccircle cx=%224%22 cy=%229%22 r=%221.4%22/%3E%3Ccircle cx=%224%22 cy=%2214%22 r=%221.4%22/%3E%3Ccircle cx=%224%22 cy=%2219%22 r=%221.4%22/%3E%3Ccircle cx=%224%22 cy=%2224%22 r=%221.4%22/%3E%3Ccircle cx=%229%22 cy=%224%22 r=%221.4%22/%3E%3Ccircle cx=%229%22 cy=%229%22 r=%221.4%22/%3E%3Ccircle cx=%229%22 cy=%2214%22 r=%221.4%22/%3E%3Ccircle cx=%229%22 cy=%2219%22 r=%221.4%22/%3E%3Ccircle cx=%229%22 cy=%2224%22 r=%221.4%22/%3E%3Ccircle cx=%2215%22 cy=%224%22 r=%221.4%22/%3E%3Ccircle cx=%2215%22 cy=%229%22 r=%221.4%22/%3E%3Ccircle cx=%2215%22 cy=%2214%22 r=%221.4%22/%3E%3Ccircle cx=%2215%22 cy=%2219%22 r=%221.4%22/%3E%3Ccircle cx=%2215%22 cy=%2224%22 r=%221.4%22/%3E%3Ccircle cx=%2220%22 cy=%224%22 r=%221.4%22/%3E%3Ccircle cx=%2220%22 cy=%229%22 r=%221.4%22/%3E%3Ccircle cx=%2220%22 cy=%2214%22 r=%221.4%22/%3E%3Ccircle cx=%2220%22 cy=%2219%22 r=%221.4%22/%3E%3Ccircle cx=%2220%22 cy=%2224%22 r=%221.4%22/%3E%3Ccircle cx=%2226%22 cy=%224%22 r=%221.4%22/%3E%3Ccircle cx=%2226%22 cy=%229%22 r=%221.4%22/%3E%3Ccircle cx=%2226%22 cy=%2214%22 r=%221.4%22/%3E%3Ccircle cx=%2226%22 cy=%2219%22 r=%221.4%22/%3E%3Ccircle cx=%2226%22 cy=%2224%22 r=%221.4%22/%3E%3C/g%3E%3C/svg%3E&quot;)"></div><div class="flag-info"><div class="flag-name">دلار آمریکا <span class="mkt-change" id="chgUSD">—</span></div><div class="flag-sub"><span id="pxUSD">—</span> <small data-cur>تومان</small></div></div></a>
+          <a href="https://www.tgju.org/profile/price_eur" target="_blank" rel="noopener" class="stat flag-card"><div class="stat-link-badge" title="مشاهده نمودار در tgju.org"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div><div class="flag-img" style="background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 72 48%22%3E%3Crect width=%2272%22 height=%2248%22 fill=%22%23039%22/%3E%3Cg fill=%22%23fc0%22%3E%3Ccircle cx=%2236.0%22 cy=%229.0%22 r=%222.2%22/%3E%3Ccircle cx=%2243.5%22 cy=%2211.0%22 r=%222.2%22/%3E%3Ccircle cx=%2249.0%22 cy=%2216.5%22 r=%222.2%22/%3E%3Ccircle cx=%2251.0%22 cy=%2224.0%22 r=%222.2%22/%3E%3Ccircle cx=%2249.0%22 cy=%2231.5%22 r=%222.2%22/%3E%3Ccircle cx=%2243.5%22 cy=%2237.0%22 r=%222.2%22/%3E%3Ccircle cx=%2236.0%22 cy=%2239.0%22 r=%222.2%22/%3E%3Ccircle cx=%2228.5%22 cy=%2237.0%22 r=%222.2%22/%3E%3Ccircle cx=%2223.0%22 cy=%2231.5%22 r=%222.2%22/%3E%3Ccircle cx=%2221.0%22 cy=%2224.0%22 r=%222.2%22/%3E%3Ccircle cx=%2223.0%22 cy=%2216.5%22 r=%222.2%22/%3E%3Ccircle cx=%2228.5%22 cy=%2211.0%22 r=%222.2%22/%3E%3C/g%3E%3C/svg%3E&quot;)"></div><div class="flag-info"><div class="flag-name">یورو <span class="mkt-change" id="chgEUR">—</span></div><div class="flag-sub"><span id="pxEUR">—</span> <small data-cur>تومان</small></div></div></a>
+          <a href="https://www.tgju.org/profile/price_gbp" target="_blank" rel="noopener" class="stat flag-card"><div class="stat-link-badge" title="مشاهده نمودار در tgju.org"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div><div class="flag-img" style="background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 60 40%22%3E%3Crect width=%2260%22 height=%2240%22 fill=%22%23012169%22/%3E%3Cpath d=%22M0 0L60 40M60 0L0 40%22 stroke=%22%23fff%22 stroke-width=%228%22/%3E%3Cpath d=%22M0 0L60 40M60 0L0 40%22 stroke=%22%23c8102e%22 stroke-width=%223%22/%3E%3Cpath d=%22M30 0V40M0 20H60%22 stroke=%22%23fff%22 stroke-width=%2213%22/%3E%3Cpath d=%22M30 0V40M0 20H60%22 stroke=%22%23c8102e%22 stroke-width=%228%22/%3E%3C/svg%3E&quot;)"></div><div class="flag-info"><div class="flag-name">پوند انگلیس <span class="mkt-change" id="chgGBP">—</span></div><div class="flag-sub"><span id="pxGBP">—</span> <small data-cur>تومان</small></div></div></a>
+          <a href="https://www.tgju.org/profile/crypto-tether" target="_blank" rel="noopener" class="stat flag-card"><div class="stat-link-badge" title="مشاهده نمودار در tgju.org"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div><div class="flag-img" style="background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 48 48%22%3E%3Ccircle cx=%2224%22 cy=%2224%22 r=%2224%22 fill=%22%2326a17b%22/%3E%3Cpath fill=%22%23fff%22 d=%22M26.6 21.4v-3.2h7.3v-4.9H14.1v4.9h7.3v3.2c-5.9.3-10.3 1.4-10.3 2.8s4.4 2.500 10.300 2.800v10.200h5.200V27c5.900-.3 10.300-1.400 10.300-2.800s-4.400-2.500-10.300-2.800zm0 4.700c-.1 0-.9.1-2.600.1s-2.400-.1-2.600-.1c-5.200-.2-9-1.100-9-2.200s3.800-2 9-2.200v3.500c.2 0 1 .1 2.600.1s2.500-.1 2.600-.1v-3.500c5.200.2 9 1.100 9 2.200s-3.800 2-9 2.200z%22/%3E%3C/svg%3E&quot;)"></div><div class="flag-info"><div class="flag-name">تتر (USDT) <span class="mkt-change" id="chgTETHER">—</span></div><div class="flag-sub"><span id="pxTETHER">—</span> <small data-cur>تومان</small></div></div></a>
         </div>
         <h3 class="mkt-group-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 3h12l4 6-10 12L2 9Z"/><path d="M2 9h20"/></svg>طلا</h3>
         <div class="stats">
@@ -492,7 +478,13 @@ html,body{overflow-x:clip}
         </div>
         <h3 class="mkt-group-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>سکه</h3>
         <div class="stats">
-          <a href="https://www.tgju.org/profile/sekee" target="_blank" rel="noopener" class="stat" style="--sa:var(--primary)">
+          <a href="https://www.tgju.org/coin" target="_blank" rel="noopener" class="stat" style="--sa:var(--primary)">
+            <div class="stat-link-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+            <div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/></svg></div>
+            <div style="flex:1"><div class="stat-label">سکه بهار آزادی <span class="mkt-change" id="chgBAHAR">—</span></div><div class="stat-sub">طرح قدیمی</div><div class="stat-val"><span id="pxBAHAR">—</span><small data-cur>تومان</small></div></div>
+            <div class="stat-link-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>نمودار</div>
+          </a>
+            <a href="https://www.tgju.org/profile/sekee" target="_blank" rel="noopener" class="stat" style="--sa:var(--primary)">
             <div class="stat-link-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
             <div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/></svg></div>
             <div style="flex:1"><div class="stat-label">سکه امامی <span class="mkt-change" id="chgIMAMI">—</span></div><div class="stat-sub">طرح جدید</div><div class="stat-val"><span id="pxIMAMI">—</span><small data-cur>تومان</small></div></div>
@@ -534,7 +526,7 @@ function toast(msg,type='err'){const ic={err:'<svg viewBox="0 0 24 24" fill="non
 let CUR='toman';try{CUR=localStorage.getItem('majik-cur')||'toman'}catch(e){}
 const CUR_LABEL=()=>CUR==='rial'?'ریال':'تومان';
 function applyCurrency(){$$('[data-cur]').forEach(el=>el.textContent=CUR_LABEL());$$('.unit-opt').forEach(b=>b.classList.toggle('active',b.dataset.unit===CUR));renderAllResults();if(marketCache)renderMarket();try{localStorage.setItem('majik-cur',CUR)}catch(e){}}
-$$('.unit-opt').forEach(b=>{b.addEventListener('click',()=>{CUR=b.dataset.unit;applyCurrency()})});
+$$('.unit-opt').forEach(b=>{b.addEventListener('click',()=>{CUR=b.dataset.unit;applyCurrency();syncGold()})});
 const jdiv=(a,b)=>~~(a/b),jmod=(a,b)=>a-~~(a/b)*b;
 function jalCal(jy){const br=[-61,9,38,199,426,686,756,818,1111,1181,1210,1635,2060,2097,2192,2262,2324,2394,2456,3178],bl=br.length,gy=jy+621;let lJ=-14,jp=br[0],jmp=0,jm,i;for(i=1;i<bl;i++){jm=br[i];jmp=jm-jp;if(jy<jm)break;lJ+=jdiv(jmp,33)*8+jdiv(jmod(jmp,33),4);jp=jm}let n=jy-jp;lJ+=jdiv(n,33)*8+jdiv(jmod(n,33)+3,4);if(jmod(jmp,33)===4&&jmp-n===4)lJ+=1;const lG=jdiv(gy,4)-jdiv((jdiv(gy,100)+1)*3,4)-150,m=20+lJ-lG;if(jmp-n<6)n=n-jmp+jdiv(jmp+4,33)*33;let lp=jmod(jmod(n+1,33)-1,4);if(lp===-1)lp=4;return{leap:lp,gy,march:m}}
 function g2d(gy,gm,gd){let d=jdiv((gy+jdiv(gm-8,6)+100100)*1461,4)+jdiv(153*jmod(gm+9,12)+2,5)+gd-34840408;d=d-jdiv(jdiv(gy+100100+jdiv(gm-8,6),100)*3,4)+752;return d}
@@ -547,12 +539,11 @@ function todayJal(){const n=new Date();return g2jal(n.getFullYear(),n.getMonth()
 function setTheme(t){document.documentElement.dataset.theme=t;try{localStorage.setItem('majik-theme',t)}catch(e){}}
 (function(){let t=null;try{t=localStorage.getItem('majik-theme')}catch(e){}setTheme(t==='dark'?'dark':'light')})();
 $('#themeBtn').addEventListener('click',()=>setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark'));
-$('#clearCacheBtn').addEventListener('click',async()=>{try{const regs=await navigator.serviceWorker.getRegistrations();await Promise.all(regs.map(r=>r.unregister()));const keys=await caches.keys();await Promise.all(keys.map(k=>caches.delete(k)));localStorage.clear();sessionStorage.clear();toast('کش پاک شد — صفحه رفرش می‌شود','ok');setTimeout(()=>location.reload(),800)}catch(e){toast('خطا در پاک‌سازی کش','err');location.reload()}});
-function tickClock(){const n=new Date();const w=n.toLocaleDateString('fa-IR',{weekday:'long'});const d=n.toLocaleDateString('fa-IR',{day:'numeric'});const m=n.toLocaleDateString('fa-IR',{month:'long'});const y=n.toLocaleDateString('fa-IR',{year:'numeric'});$('#faDate').textContent=w+' '+d+' '+m+' '+y;$('#faTime').textContent=n.toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'});$('#faYear').textContent=new Intl.DateTimeFormat('fa-IR',{year:'numeric'}).format(n)}
+function tickClock(){const n=new Date();$('#faDate').textContent=n.toLocaleDateString('fa-IR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});$('#faTime').textContent=n.toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'});$('#faYear').textContent=new Intl.DateTimeFormat('fa-IR',{year:'numeric'}).format(n)}
 setInterval(tickClock,1000);tickClock();
 $('#tickerTrack').innerHTML=['فرمول قسط مساوی: اصل × نرخ ÷ (۱ − (۱ + نرخ)⁻ⁿ)','اضافه‌کار معمولاً ۴۰٪ بیشتر از نرخ ساعت عادی محاسبه می‌شود','حاشیه سود واقعی = سود خالص پس از تخفیف و پورسانت ÷ بهای تمام‌شده','فرمول فروش طلا: وزن خالص × (قیمت ۱۸ عیار × ۷۴۰ ÷ ۷۵۰)','فرمول قسط مساوی: اصل × نرخ ÷ (۱ − (۱ + نرخ)⁻ⁿ)','اضافه‌کار معمولاً ۴۰٪ بیشتر از نرخ ساعت عادی محاسبه می‌شود','حاشیه سود واقعی = سود خالص پس از تخفیف و پورسانت ÷ بهای تمام‌شده','فرمول فروش طلا: وزن خالص × (قیمت ۱۸ عیار × ۷۴۰ ÷ ۷۵۰)'].map(t=>`<span>${t}</span>`).join('');
 let activeTool='loan';
-function activateTab(n){activeTool=n;$$('.tab').forEach(b=>{const o=b.dataset.tab===n;b.classList.toggle('active',o)});$$('.panel').forEach(p=>p.classList.toggle('active',p.id==='panel-'+n));closeJCal();if(n==='market'&&!marketCache)fetchMarket(false);if(n==='gold'){if(marketCache)autoFillGoldPrice(0);else fetchMarket(false)}}
+function activateTab(n){activeTool=n;$$('.tab').forEach(b=>{const o=b.dataset.tab===n;b.classList.toggle('active',o)});$$('.panel').forEach(p=>p.classList.toggle('active',p.id==='panel-'+n));closeJCal();if((n==='market'||n==='gold')&&(!marketCache||Date.now()-marketTs>60000))fetchMarket(false)}
 $$('.tab').forEach(b=>b.addEventListener('click',()=>activateTab(b.dataset.tab)));
 function setErr(id,msg){const f=$('#'+id).closest('.field');f.classList.add('invalid');f.querySelector('.err').textContent=msg}
 function clearErrs(form){form.querySelectorAll('.field.invalid').forEach(f=>f.classList.remove('invalid'))}
@@ -561,19 +552,16 @@ const jcalEl=$('#jcal');let jcalView=null,jcalOpen=false;
 function parseJalString(str){const m=toEnDigits(String(str||'').trim()).match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);if(!m)return null;const jy=+m[1],jm=+m[2],jd=+m[3];if(jy<1300||jy>1500||jm<1||jm>12||jd<1||jd>jalMonthLen(jy,jm))return null;return{jy,jm,jd}}
 function jalToInputStr(j){return toFaDigits(pad(j.jy,4)+'/'+pad(j.jm,2)+'/'+pad(j.jd,2))}
 function setTodayJal(){$('#loanDate').value=jalToInputStr(todayJal())}
-setTodayJal();
-function openJCal(){const sel=parseJalString($('#loanDate').value)||todayJal();jcalView={jy:sel.jy,jm:sel.jm};renderJCal();const r=$('#loanDate').getBoundingClientRect();let top=r.bottom+8;let right=window.innerWidth-r.right;const calW=310,calH=320;if(right+calW>window.innerWidth)right=window.innerWidth-calW-8;if(right<8)right=8;if(top+calH>window.innerHeight)top=r.top-calH-8;if(top<8)top=8;jcalEl.style.top=top+'px';jcalEl.style.right=right+'px';document.body.appendChild(jcalEl);jcalEl.hidden=false;jcalOpen=true}
+function openJCal(){const sel=parseJalString($('#loanDate').value)||todayJal();jcalView={jy:sel.jy,jm:sel.jm};renderJCal();jcalEl.hidden=false;jcalOpen=true}
 function closeJCal(){jcalEl.hidden=true;jcalOpen=false}
-function renderJCal(){const{jy,jm}=jcalView,sel=parseJalString($('#loanDate').value),today=todayJal();const mo=JM.map((m,i)=>`<option value="${i+1}" ${i+1===jm?'selected':''}>${m}</option>`).join('');let yo='';for(let y=jy-8;y<=jy+8;y++)yo+=`<option value="${y}" ${y===jy?'selected':''}>${toFaDigits(String(y))}</option>`;const g0=jal2g(jy,jm,1),off=(new Date(g0.gy,g0.gm-1,g0.gd).getDay()+1)%7,len=jalMonthLen(jy,jm);let cells=JW.map((w,i)=>`<div class="jcal-wd ${i===6?'fri':''}">${w}</div>`).join('');for(let i=0;i<off;i++)cells+='<div></div>';for(let d=1;d<=len;d++){const cls=['jcal-day'];if((off+d-1)%7===6)cls.push('fri');if(today.jy===jy&&today.jm===jm&&today.jd===d)cls.push('today');if(sel&&sel.jy===jy&&sel.jm===jm&&sel.jd===d)cls.push('selected');cells+=`<button type="button" class="${cls.join(' ')}" data-jd="${d}">${toFaDigits(String(d))}</button>`}jcalEl.innerHTML=`<div class="jcal-head"><button type="button" class="jcal-nav" data-nav="prev-m" aria-label="ماه قبل"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 18 6-6-6-6"/></svg></button><select data-sel="month" aria-label="ماه">${mo}</select><select data-sel="year" aria-label="سال">${yo}</select><button type="button" class="jcal-nav" data-nav="next-m" aria-label="ماه بعد"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="jcal-grid">${cells}</div><div class="jcal-foot"><button type="button" data-act="today">امروز</button><button type="button" data-act="clear">پاک کردن</button></div>`}
+function renderJCal(){const{jy,jm}=jcalView,sel=parseJalString($('#loanDate').value),today=todayJal();const mo=JM.map((m,i)=>`<option value="${i+1}" ${i+1===jm?'selected':''}>${m}</option>`).join('');let yo='';for(let y=jy-8;y<=jy+8;y++)yo+=`<option value="${y}" ${y===jy?'selected':''}>${nfInt.format(y)}</option>`;const g0=jal2g(jy,jm,1),off=(new Date(g0.gy,g0.gm-1,g0.gd).getDay()+1)%7,len=jalMonthLen(jy,jm);let cells=JW.map((w,i)=>`<div class="jcal-wd ${i===6?'fri':''}">${w}</div>`).join('');for(let i=0;i<off;i++)cells+='<div></div>';for(let d=1;d<=len;d++){const cls=['jcal-day'];if((off+d-1)%7===6)cls.push('fri');if(today.jy===jy&&today.jm===jm&&today.jd===d)cls.push('today');if(sel&&sel.jy===jy&&sel.jm===jm&&sel.jd===d)cls.push('selected');cells+=`<button type="button" class="${cls.join(' ')}" data-jd="${d}">${nfInt.format(d)}</button>`}jcalEl.innerHTML=`<div class="jcal-head"><button type="button" class="jcal-nav" data-nav="prev-m" aria-label="ماه قبل"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 18 6-6-6-6"/></svg></button><select data-sel="month" aria-label="ماه">${mo}</select><select data-sel="year" aria-label="سال">${yo}</select><button type="button" class="jcal-nav" data-nav="next-m" aria-label="ماه بعد"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg></button></div><div class="jcal-grid">${cells}</div><div class="jcal-foot"><button type="button" data-act="today">امروز</button><button type="button" data-act="clear">پاک کردن</button></div>`}
 function selectJal(jy,jm,jd){$('#loanDate').value=jalToInputStr({jy,jm,jd});closeJCal();calcLoan()}
 jcalEl.addEventListener('click',e=>{const nav=e.target.closest('[data-nav]');if(nav){if(nav.dataset.nav==='prev-m'){jcalView.jm--;if(jcalView.jm<1){jcalView.jm=12;jcalView.jy--}}else{jcalView.jm++;if(jcalView.jm>12){jcalView.jm=1;jcalView.jy++}}renderJCal();return}const day=e.target.closest('.jcal-day');if(day){selectJal(jcalView.jy,jcalView.jm,+day.dataset.jd);return}const act=e.target.closest('[data-act]');if(act){if(act.dataset.act==='today'){const t=todayJal();selectJal(t.jy,t.jm,t.jd)}else{$('#loanDate').value='';closeJCal();calcLoan()}}});
-jcalEl.addEventListener('change',e=>{e.stopPropagation();if(e.target.dataset.sel==='month'){jcalView.jm=+e.target.value;renderJCal()}if(e.target.dataset.sel==='year'){jcalView.jy=+e.target.value;renderJCal()}});
+jcalEl.addEventListener('change',e=>{if(e.target.dataset.sel==='month'){jcalView.jm=+e.target.value;renderJCal()}if(e.target.dataset.sel==='year'){jcalView.jy=+e.target.value;renderJCal()}});
 $('#loanDateBtn').addEventListener('click',e=>{e.stopPropagation();jcalOpen?closeJCal():openJCal()});
 $('#loanDate').addEventListener('focus',()=>{if(!jcalOpen)openJCal()});
-document.addEventListener('click',e=>{if(jcalOpen&&!e.target.closest('.date-control')&&!e.target.closest('.jcal'))closeJCal()});
+document.addEventListener('click',e=>{if(jcalOpen&&!e.target.closest('.date-control'))closeJCal()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&jcalOpen)closeJCal()});
-window.addEventListener('scroll',()=>{if(jcalOpen)openJCal()},{passive:true});
-window.addEventListener('resize',()=>{if(jcalOpen)openJCal()});
 const lastResults={loan:null,salary:null,sales:null,gold:null};
 function addMonths(base,m){const d=new Date(base.getFullYear(),base.getMonth()+m,1);const last=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();d.setDate(Math.min(base.getDate(),last));return d}
 function calcLoan(){clearErrs($('#form-loan'));const rawA=$('#loanAmount').value,rawR=$('#loanRate').value,rawM=$('#loanMonths').value,rawD=$('#loanDate').value.trim();if(rawA===''&&rawR===''&&rawM===''&&rawD===''){$('#resLoan').hidden=true;$('#emptyLoan').hidden=false;lastResults.loan=null;return}const P=parseNum(rawA),annual=rawR===''?0:parseNum(rawR),n=parseNum(rawM);let ok=true;if(isNaN(P)||P<=0){setErr('loanAmount','مبلغ وام باید بزرگ‌تر از صفر باشد');ok=false}if(isNaN(annual)||annual<0||annual>100){setErr('loanRate','نرخ سود باید بین ۰ تا ۱۰۰ باشد');ok=false}if(isNaN(n)||n<1||n>600||!Number.isInteger(n)){setErr('loanMonths','تعداد اقساط باید بین ۱ تا ۶۰۰ باشد');ok=false}const jd=parseJalString(rawD);if(!jd){setErr('loanDate','تاریخ شمسی معتبر نیست');ok=false}if(!ok)return;const g=jal2g(jd.jy,jd.jm,jd.jd);const start=new Date(g.gy,g.gm-1,g.gd);const r=annual/100/12;const pmt=r===0?P/n:P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);let bal=P,totInt=0,totPay=0;const rows=[];for(let i=1;i<=n;i++){const interest=bal*r;const principal=(i===n)?bal:pmt-interest;const payment=principal+interest;bal-=principal;if(bal<.5)bal=0;totInt+=interest;totPay+=payment;rows.push({i,date:addMonths(start,i-1).toLocaleDateString('fa-IR'),pay:payment,int:interest,prin:principal,bal})}lastResults.loan={pmt,totInt,totPay,n,P,rows};renderLoan();$('#emptyLoan').hidden=true;$('#resLoan').hidden=false}
@@ -596,7 +584,7 @@ function applyKarat(){
   const live=karatLivePrice();
   const hint=$('#goldLiveHint');
   if(hint)hint.textContent=live?('قیمت روز طلای '+toFaDigits(k)+' عیار: '+nfInt.format(live)+' تومان'):'قیمت روز در دسترس نیست — دستی وارد کنید';
-  if(!goldPriceTouched&&live){$('#goldPrice').value=String(live);applyGrouping($('#goldPrice'))}
+  if(!goldPriceTouched&&live){$('#goldPrice').value=String(convertAmount(live));applyGrouping($('#goldPrice'))}
   calcGold();
 }
 function calcGold(){
@@ -669,8 +657,8 @@ function renderGold(){
   else{box.style.display='none'}
   $('#goldBar').innerHTML=bar;$('#goldLegend').innerHTML=legend;
 }
-function setGoldLive(){const live=karatLivePrice();if(live){$('#goldPrice').value=String(live);applyGrouping($('#goldPrice'));goldPriceTouched=false;applyKarat();toast('قیمت روز طلا اعمال شد','ok');return true}const btn=$('#goldLiveBtn');btn.disabled=true;btn.textContent='⟳ در حال دریافت…';fetchMarket(false).then(function(){const fresh=karatLivePrice();if(fresh){$('#goldPrice').value=String(fresh);applyGrouping($('#goldPrice'));goldPriceTouched=false;applyKarat();toast('قیمت روز طلا اعمال شد','ok')}else{toast('قیمت روز در دسترس نیست','warn')}btn.disabled=false;btn.textContent='⟳ قیمت روز'});return false}
-function autoFillGoldPrice(tries){if(karatLivePrice()){applyKarat();return}if(tries>0)setTimeout(()=>autoFillGoldPrice(tries-1),1200)}
+function setGoldLive(){const live=karatLivePrice();if(!live){toast('قیمت روز هنوز در دسترس نیست','warn');return false}$('#goldPrice').value=String(convertAmount(live));applyGrouping($('#goldPrice'));goldPriceTouched=false;applyKarat();return true}
+function syncGold(){try{applyKarat()}catch(e){}}
 $$('.mode-opt').forEach(b=>b.addEventListener('click',()=>{goldMode=b.dataset.mode;$('#form-gold').dataset.mode=goldMode;$$('.mode-opt').forEach(x=>x.classList.toggle('active',x===b));calcGold()}));
 $('#form-gold').querySelectorAll('input').forEach(i=>i.addEventListener('input',calcGold));
 $('#goldKarat').addEventListener('change',applyKarat);
@@ -678,67 +666,59 @@ $('#goldLiveBtn').addEventListener('click',e=>{e.preventDefault();if(setGoldLive
 $('#goldPrice').addEventListener('input',()=>{goldPriceTouched=true});
 
 /* ═══ قیمت روز بازار — tgju.org ═══ */
+const TGJU_NAMED='crypto-tether,price_dollar_rl,price_eur,price_gbp';
 const TGJU_KEYS='137138,137137,137139,137140,137141,137119,137123,137120,137121,137122,137225,137207,137221,137222,137218';
-let marketCache=null;
-function detectCard(title){const t=(title||'').replace(/ي/g,'ی').replace(/ك/g,'ک');if(/ربع/.test(t))return 'ROB';if(/نیم/.test(t))return 'NIM';if(/امامی|تمام\s*بهار|طرح\s*جدید/.test(t))return 'IMAMI';if(/انس|اونس/.test(t))return 'GOLD';if(/۱۸|18/.test(t))return 'G18';if(/پوند/.test(t))return 'GBP';if(/یورو/.test(t))return 'EUR';if(/دلار/.test(t)&&!/کانادا|استرالیا|نیوزیلند|سنگاپور|هنگ/.test(t))return 'USD';return null}
-function normalizeItem(item,key){if(!item||!item.p)return null;const p=Number(item.p);if(!isFinite(p)||p<=0)return null;if(key==='GOLD'){return{price:Math.round(p*100)/100,high:item.h?Math.round(Number(item.h)*100)/100:Math.round(p*1.01*100)/100,low:item.l?Math.round(Number(item.l)*100)/100:Math.round(p*0.99*100)/100,change:Number(item.dp||0),source:'tgju.org',time:item.t}}return{price:Math.round(p/10),high:item.h?Math.round(Number(item.h)/10):Math.round(p*1.005/10),low:item.l?Math.round(Number(item.l)/10):Math.round(p*0.995/10),change:Number(item.dp||0),source:'tgju.org',time:item.t}}
-
+let marketCache=null,marketTs=0;
+function detectCard(title,name){if(name==='price_gbp')return 'GBP';if(name==='price_dollar_rl')return 'USD';if(name==='price_eur')return 'EUR';if(name==='crypto-tether')return 'TETHER';return detectCard0(title)}
+function detectCard0(title){const t=(title||'').replace(/ي/g,'ی').replace(/ك/g,'ک');if(/تتر/.test(t))return 'TETHER';if(/ربع/.test(t))return 'ROB';if(/نیم/.test(t))return 'NIM';if(/بهار\s*آزادی/.test(t)&&!/تمام/.test(t))return 'BAHAR';if(/امامی|تمام\s*بهار|طرح\s*جدید/.test(t))return 'IMAMI';if(/انس|اونس/.test(t))return 'GOLD';if(/۱۸|18/.test(t))return 'G18';if(/پوند/.test(t))return 'GBP';if(/یورو/.test(t))return 'EUR';if(/دلار/.test(t)&&!/کانادا|استرالیا|نیوزیلند|سنگاپور|هنگ/.test(t))return 'USD';return null}
+function normalizeItem(item,key){if(!item||!item.p)return null;const p=key==='TETHER'&&item.p_irr?Number(String(item.p_irr).replace(/,/g,'')):Number(item.p);if(!isFinite(p)||p<=0)return null;if(key==='GOLD'){return{price:Math.round(p*100)/100,high:item.h?Math.round(Number(item.h)*100)/100:Math.round(p*1.01*100)/100,low:item.l?Math.round(Number(item.l)*100)/100:Math.round(p*0.99*100)/100,change:Number(item.dp||0),source:'tgju.org',time:item.t}}return{price:Math.round(p/10),high:item.h?Math.round(Number(item.h)/10):Math.round(p*1.005/10),low:item.l?Math.round(Number(item.l)/10):Math.round(p*0.995/10),change:Number(item.dp||0),source:'tgju.org',time:item.t}}
 async function fetchMarket(manual){
-  var btn=$('#refreshMkt'),status=$('#mktStatus');
-  if(btn)btn.classList.add('spin');
-  $('#mktUpdated').textContent='در حال دریافت قیمت‌ها…';
-  if(status)status.hidden=true;
-  var fallbackPrices={USD:{price:215000,change:0},EUR:{price:246000,change:0},GBP:{price:309420,change:0},GOLD:{price:4285,change:0},G18:{price:23889600,change:0},IMAMI:{price:238510000,change:0},NIM:{price:122000000,change:0},ROB:{price:64500000,change:0}};
-  var url='https://api.tgju.org/v1/widget/tmp?keys='+TGJU_KEYS+'&_='+Date.now();
-  function parsePrices(txt){if(!txt||txt.trim().charAt(0)!=='{')return null;var j=null;try{j=JSON.parse(txt)}catch(e){return null}var inds=(j&&j.response&&j.response.indicators)||[];if(!inds.length)return null;var res={};inds.forEach(function(item){var key=detectCard(item.title);if(!key||res[key])return;var norm=normalizeItem(item,key);if(norm)res[key]=norm});return Object.keys(res).length?res:null}
-
-  function fetchWithTimeout(u,ms){return new Promise(function(res,rej){var c=new AbortController();var t=setTimeout(function(){c.abort();rej(new Error('timeout'))},ms);fetch(u,{cache:'no-store',signal:c.signal}).then(function(r){clearTimeout(t);res(r)}).catch(function(e){clearTimeout(t);rej(e)})})}
-
-  var sources=[
-    {url:'https://majikoz-cyber.github.io/majik-calc/prices.json?_='+Date.now(),label:'GitHub Pages (هر ۲۰ دقیقه)',offline:false,timeout:5000},
-    {url:'https://api.tgju.org/v1/widget/tmp?keys='+TGJU_KEYS+'&_='+Date.now(),label:'tgju.org مستقیم',offline:false,timeout:8000},
-    {url:'https://api.allorigins.win/raw?url='+encodeURIComponent('https://api.tgju.org/v1/widget/tmp?keys='+TGJU_KEYS),label:'پراکسی AllOrigins',offline:false,timeout:10000},
-    {url:'https://api.codetabs.com/v1/proxy/?req='+encodeURIComponent('https://api.tgju.org/v1/widget/tmp?keys='+TGJU_KEYS),label:'پراکسی CodeTabs',offline:false,timeout:10000},
-    {url:'./prices.json',label:'بسته محلی',offline:true,timeout:3000}
-  ];
-
-  var result=null,source='',offline=false;
+  const btn=$('#refreshMkt'),status=$('#mktStatus');
+  btn.classList.add('spin');$('#mktUpdated').textContent='در حال دریافت قیمت‌ها…';status.hidden=true;
   try{
-    var promises=sources.map(function(s){return fetchWithTimeout(s.url,s.timeout).then(function(r){if(!r.ok)throw new Error('http '+r.status);return r.text()}).then(function(txt){var parsed=parsePrices(txt);if(parsed)return{data:parsed,source:s.label,offline:s.offline};throw new Error('parse failed')}).catch(function(){return null})});
-    var settled=await Promise.allSettled(promises);
-    for(var i=0;i<settled.length;i++){if(settled[i].status==='fulfilled'&&settled[i].value){result=settled[i].value.data;source=settled[i].value.source;offline=settled[i].value.offline;break}}
-  }catch(e){}
-
-  if(!result){
-    try{
-      var cached=JSON.parse(localStorage.getItem('majik-market-cache')||'null');
-      if(cached&&cached.data&&Object.keys(cached.data).length){result=cached.data;source='کش ذخیره‌شده'}
-    }catch(e){}
-  }
-  if(!result){result=fallbackPrices;source='قیمت‌های تخمینی (آفلاین)';offline=true}
-  if(btn)btn.classList.remove('spin');
-  marketCache=result;renderMarket();autoFillGoldPrice(0);
-  if(!offline&&source!=='کش ذخیره‌شده'){try{localStorage.setItem('majik-market-cache',JSON.stringify({data:result,time:Date.now()}))}catch(e){}}
-  var nowStr=new Date().toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'});
-  var isRealTime=source==='tgju.org مستقیم';
-  $('#mktUpdated').textContent='به‌روزرسانی: '+nowStr+' • '+Object.keys(result).length+' قیمت'+(isRealTime?' (لحظه‌ای)':' (۲۰ دقیقه پیش)');
-  if(status){
-    var cls=(offline||source==='کش ذخیره‌شده')?'warn':(isRealTime?'ok':'info');
-    status.className='mkt-status '+cls;
-    var srcLabel=source+(isRealTime?' ✓ لحظه‌ای':' (هر ۲۰ دقیقه آپدیت)');
-    status.innerHTML=(cls==='ok'?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg>':cls==='info'?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-6M12 8h.01"/></svg>':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4m0 4h.01"/></svg>')+'<span>قیمت‌ها از: <b>'+srcLabel+'</b>'+(offline?' — اینترنت را وصل کنید':'')+'</span>';
+    const ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),12000);let r;
+    let indicators=[];try{const rs=await Promise.all([TGJU_KEYS,TGJU_NAMED].map(k=>fetch('https://api.tgju.org/v1/widget/tmp?keys='+k+'&_='+Date.now(),{cache:'no-store',signal:ctl.signal}).then(x=>x.ok?x.json():null).catch(()=>null)));rs.forEach(d=>{if(d&&d.response&&d.response.indicators)indicators=indicators.concat(d.response.indicators)})}finally{clearTimeout(to)}
+    r=1;
+    if(!indicators.length)throw new Error('داده‌ای دریافت نشد');
+    const result={};
+    indicators.forEach(item=>{const key=detectCard(item.title,item.name);if(!key||result[key])return;const norm=normalizeItem(item,key);if(norm)result[key]=norm});
+    btn.classList.remove('spin');
+    if(!Object.keys(result).length)throw new Error('هیچ قیمت معتبری پیدا نشد');
+    marketCache=result;marketTs=Date.now();renderMarket();syncGold();
+    try{localStorage.setItem('majik-market-cache',JSON.stringify({data:result,time:Date.now()}))}catch(e){}
+    const nowStr=new Date().toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'});
+    const sample=Object.values(result)[0];
+    let txt='به‌روزرسانی: '+nowStr+' • '+Object.keys(result).length+' قیمت • tgju.org';
+    if(sample&&sample.time)txt+=' • داده: '+sample.time;
+    $('#mktUpdated').textContent=txt;
+    status.className='mkt-status ok';
+    status.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg><span>✅ قیمت‌های لحظه‌ای از <b>tgju.org</b></span>';
     status.hidden=false;
+    if(manual)toast('قیمت‌های بازار به‌روزرسانی شد','ok');
+  }catch(e){
+    btn.classList.remove('spin');
+    try{
+      const cached=JSON.parse(localStorage.getItem('majik-market-cache')||'null');
+      if(cached&&cached.data&&Object.keys(cached.data).length){
+        marketCache=cached.data;marketTs=cached.time||0;renderMarket();syncGold();
+        status.className='mkt-status warn';
+        status.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4m0 4h.01"/></svg><span>⚠️ اتصال برقرار نشد؛ نمایش آخرین قیمت‌های ذخیره‌شده ('+Math.round((Date.now()-cached.time)/60000)+' دقیقه پیش)</span>';
+        status.hidden=false;$('#mktUpdated').textContent='کش محلی';
+        if(manual)toast('خطا در دریافت؛ استفاده از کش','warn');
+        return;
+      }
+    }catch(e2){}
+    status.className='mkt-status err';
+    status.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v4m0 4h.01"/></svg><span>خطا: '+e.message+'</span>';
+    status.hidden=false;$('#mktUpdated').textContent='خطا در دریافت';
+    if(manual)toast('دریافت قیمت‌ها ناموفق بود','err');
   }
-  if(manual)toast('قیمت‌های بازار به‌روزرسانی شد'+(isRealTime?' ✓ لحظه‌ای':''),'ok');
 }
-  
-
-
-function renderMarket(){if(!marketCache)return;const f=v=>CUR==='rial'?v*10:v;['GBP','GOLD','G18','IMAMI','NIM','ROB'].forEach(k=>{const it=marketCache[k];const px=$('#px'+k);const ch=$('#chg'+k);if(!px)return;if(!it||!it.price){px.textContent='—';if(ch){ch.textContent='—';ch.className='mkt-change'}return}countUp(px,f(it.price));if(ch){const c=Number(it.change||0);ch.textContent=(c>0?'+':'')+nf1.format(c)+'٪';ch.className='mkt-change '+(c>0?'up':c<0?'down':'')}})}
+function renderMarket(){if(!marketCache)return;const f=v=>CUR==='rial'?v*10:v;['USD','EUR','GBP','TETHER','GOLD','G18','IMAMI','BAHAR','NIM','ROB'].forEach(k=>{const it=marketCache[k];const px=$('#px'+k);const ch=$('#chg'+k);if(!px)return;if(!it||!it.price){px.textContent='—';if(ch){ch.textContent='—';ch.className='mkt-change'}return}countUp(px,f(it.price));if(ch){const c=Number(it.change||0);ch.textContent=(c>0?'+':'')+nf1.format(c)+'٪';ch.className='mkt-change '+(c>0?'up':c<0?'down':'')}})}
 const marketRefreshBtn=$('#refreshMkt');if(marketRefreshBtn){marketRefreshBtn.onclick=()=>fetchMarket(true)}
 if(window.__majikMarketTimer){clearInterval(window.__majikMarketTimer)}
-window.__majikMarketTimer=setInterval(()=>{if(activeTool==='market')fetchMarket(false)},30000);
-(function(){try{const cached=JSON.parse(localStorage.getItem('majik-market-cache')||'null');if(cached&&cached.data){marketCache=cached.data;renderMarket()}}catch(e){}})();
+window.__majikMarketTimer=setInterval(()=>{if(!document.hidden&&(activeTool==='market'||activeTool==='gold'))fetchMarket(false)},30000);
+(function(){try{const cached=JSON.parse(localStorage.getItem('majik-market-cache')||'null');if(cached&&cached.data){marketCache=cached.data;marketTs=cached.time||0;renderMarket()}}catch(e){}syncGold();fetchMarket(false)})();
 
 const TOOL_META={loan:'ماشین حساب وام',salary:'ماشین حساب حقوق',sales:'سود فروش',gold:'ماشین حساب طلا'};
 function clearTool(name){$('#form-'+name).reset();clearErrs($('#form-'+name));lastResults[name]=null;const map={loan:['emptyLoan','resLoan'],salary:['emptySalary','resSalary'],sales:['emptySales','resSales'],gold:['emptyGold','resGold']};$('#'+map[name][0]).hidden=false;$('#'+map[name][1]).hidden=true;toast('فرم «'+TOOL_META[name]+'» پاک شد','ok')}
@@ -749,8 +729,7 @@ $('#form-loan').querySelectorAll('input').forEach(i=>i.addEventListener('input',
 $('#form-salary').querySelectorAll('input').forEach(i=>i.addEventListener('input',calcSalary));
 $('#form-sales').querySelectorAll('input').forEach(i=>i.addEventListener('input',calcSales));
 $$('input[data-num]').forEach(inp=>{inp.addEventListener('input',()=>applyGrouping(inp))});
-$('#goldWeight').value='5';$('#goldStone').value='0';$('#goldOjrat').value='18';$('#goldSood').value='7';$('#goldTax').value='10';$('#goldDisc').value='0';$('#goldKasr').value='1';['goldWeight','goldStone','goldOjrat','goldSood','goldTax','goldDisc','goldKasr'].forEach(id=>applyGrouping($('#'+id)));
+$('#goldWeight').value='5';$('#goldStone').value='0';$('#goldOjrat').value='18';$('#goldSood').value='7';$('#goldTax').value='10';$('#goldDisc').value='0';$('#goldKasr').value='1';
 </script>
-<script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('./sw.js')})}</script>
 </body>
 </html>
