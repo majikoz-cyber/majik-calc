@@ -671,7 +671,7 @@ const TGJU_KEYS='137138,137137,137139,137140,137141,137119,137123,137120,137121,
 let marketCache=null,marketTs=0;
 function detectCard(title,name){if(name==='price_gbp')return 'GBP';if(name==='price_dollar_rl')return 'USD';if(name==='price_eur')return 'EUR';if(name==='crypto-tether')return 'TETHER';return detectCard0(title)}
 function detectCard0(title){const t=(title||'').replace(/ي/g,'ی').replace(/ك/g,'ک');if(/تتر/.test(t))return 'TETHER';if(/ربع/.test(t))return 'ROB';if(/نیم/.test(t))return 'NIM';if(/بهار\s*آزادی/.test(t)&&!/تمام/.test(t))return 'BAHAR';if(/امامی|تمام\s*بهار|طرح\s*جدید/.test(t))return 'IMAMI';if(/انس|اونس/.test(t))return 'GOLD';if(/۱۸|18/.test(t))return 'G18';if(/پوند/.test(t))return 'GBP';if(/یورو/.test(t))return 'EUR';if(/دلار/.test(t)&&!/کانادا|استرالیا|نیوزیلند|سنگاپور|هنگ/.test(t))return 'USD';return null}
-function normalizeItem(item,key){if(!item||!item.p)return null;const p=key==='TETHER'&&item.p_irr?Number(String(item.p_irr).replace(/,/g,'')):Number(item.p);if(!isFinite(p)||p<=0)return null;if(key==='GOLD'){return{price:Math.round(p*100)/100,high:item.h?Math.round(Number(item.h)*100)/100:Math.round(p*1.01*100)/100,low:item.l?Math.round(Number(item.l)*100)/100:Math.round(p*0.99*100)/100,change:Number(item.dp||0),source:'tgju.org',time:item.t}}return{price:Math.round(p/10),high:item.h?Math.round(Number(item.h)/10):Math.round(p*1.005/10),low:item.l?Math.round(Number(item.l)/10):Math.round(p*0.995/10),change:Number(item.dp||0),source:'tgju.org',time:item.t}}
+function normalizeItem(item,key){if(!item||!item.p)return null;const p=key==='TETHER'&&item.p_irr?Number(String(item.p_irr).replace(/,/g,'')):Number(item.p);if(!isFinite(p)||p<=0)return null;if(key==='GOLD'){return{price:Math.round(p*100)/100,high:item.h?Math.round(Number(item.h)*100)/100:Math.round(p*1.01*100)/100,low:item.l?Math.round(Number(item.l)*100)/100:Math.round(p*0.99*100)/100,change:Number(item.dp||0),source:'tgju.org',time:item.t,ua:item.updated_at||''}}return{price:Math.round(p/10),high:item.h?Math.round(Number(item.h)/10):Math.round(p*1.005/10),low:item.l?Math.round(Number(item.l)/10):Math.round(p*0.995/10),change:Number(item.dp||0),source:'tgju.org',time:item.t,ua:item.updated_at||''}}
 async function fetchMarket(manual){
   const btn=$('#refreshMkt'),status=$('#mktStatus');
   btn.classList.add('spin');$('#mktUpdated').textContent='در حال دریافت قیمت‌ها…';status.hidden=true;
@@ -687,9 +687,9 @@ async function fetchMarket(manual){
     marketCache=result;marketTs=Date.now();renderMarket();syncGold();
     try{localStorage.setItem('majik-market-cache',JSON.stringify({data:result,time:Date.now()}))}catch(e){}
     const nowStr=new Date().toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'});
-    const sample=Object.values(result)[0];
+    const latest=Object.values(result).map(x=>String(x.ua||'')).sort().pop()||'';
     let txt='به‌روزرسانی: '+nowStr+' • '+Object.keys(result).length+' قیمت • tgju.org';
-    if(sample&&sample.time)txt+=' • داده: '+sample.time;
+    if(latest.length>=19)txt+=' • داده: '+toFaDigits(latest.slice(11,19));
     $('#mktUpdated').textContent=txt;
     status.className='mkt-status ok';
     status.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.5 2.5 4.5-5"/></svg><span>✅ قیمت‌های لحظه‌ای از <b>tgju.org</b></span>';
